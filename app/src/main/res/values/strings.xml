@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Whatsapp Emotion Sticker</string>
+
+    <string name="action_end">End</string>
+    <string name="action_customize">Customize</string>
+
+
+    <!-- -
+        This is an ad unit ID for a banner test ad. Replace with your own banner ad unit id.
+        For more information, see https://support.google.com/admob/answer/3052638
+    <!- -->
+    <string name="interstitial_ad_unit_id">ca-app-pub-3050996155258099/9602332563</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3050996155258099/6646499762</string>
+	<!--
+    <string name="interstitial_ad_sample">Whatsapp Emotion Sticker</string>
+    <string name="toast_text">If you like our app, please feel free to buy the pro version with more stickers and features</string>
+    -->
+
+	<string name="intent_title">Send</string>
+
+	<string name="alert_select_sticker">fail select sticker</string>
+	<string name="alert_save_history">fail save history</string>
+	<string name="alert_clear_history">Clear the sticker history?</string>
+	<string name="alert_title">Warning</string>
+    <string name="alert_internet">Please check your internet connection</string>
+	<string name="alert_whatsapp">Whatsapp Messenger need to be installed before using this app</string>
+	<string name="OK">OK</string>
+	<string name="CANCEL">Cancel</string>
+
+	<string name="firstrun">New version 2.0 of Whatsapp emotion sticker is installed. If you cannot use this app to send stickers to whatsapp after upgrade, please consider upgrade your whatsapp messenger as well. Thank you.</string>
+
+	<integer name="menu_size">100</integer>
+
+</resources>
