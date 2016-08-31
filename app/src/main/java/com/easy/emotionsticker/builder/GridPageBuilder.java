@@ -1,13 +1,13 @@
 package com.easy.emotionsticker.builder;
 
-import android.app.Activity;
-import android.graphics.Point;
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.RelativeLayout;
 
 import com.easy.emotionsticker.R;
+import com.easy.emotionsticker.helper.ScreenHelper;
 
 /**
  * Created by david.wong on 20/07/2016.
@@ -15,12 +15,10 @@ import com.easy.emotionsticker.R;
  * provide template methods to hep build page
  */
 abstract class GridPageBuilder<Callback> {
-	protected Activity activity;
-	private Point screenSize;
+	protected Context context;
 
-	public GridPageBuilder(Activity activity) {
-		this.activity = activity;
-		this.screenSize = getScreenSize();
+	public GridPageBuilder(Context context) {
+		this.context = context;
 	}
 
 	abstract protected void build(GridLayout grid, Callback callback);
@@ -28,19 +26,13 @@ abstract class GridPageBuilder<Callback> {
 
 	protected ViewGroup.LayoutParams getGridLayoutParams(int numCol, int marginh, int marginv) {
 		final int marginSum = marginh + marginv;
-		return new ViewGroup.LayoutParams(screenSize.x/numCol-marginSum, screenSize.y/numCol-marginSum);
+		ScreenHelper screen = ScreenHelper.getInstance();
+		return new ViewGroup.LayoutParams(screen.getWidth()/numCol-marginSum, screen.getHeight()/numCol-marginSum);
 	}
 
-
-
-	private Point getScreenSize() {
-		Point size = new Point();
-		activity.getWindowManager().getDefaultDisplay().getSize(size);
-		return size;
-	}
 
 	protected void resizeMenuItem(View view) {
-		int s = activity.getResources().getInteger(R.integer.menu_size);
+		int s = context.getResources().getInteger(R.integer.menu_size);
 
 		ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
 		if (layoutParams == null) {

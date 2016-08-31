@@ -25,4 +25,9 @@ public class BaseFragment extends Fragment {
 	public void setCallback(StickerCallback callback) {
 		this.callback = callback;
 	}
+
+	@Override
+	public String toString() {
+		return tabName;
+	}
 }

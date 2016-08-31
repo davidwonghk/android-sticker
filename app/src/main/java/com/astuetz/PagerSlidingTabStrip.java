@@ -101,6 +101,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	private Locale locale;
 
+
 	public PagerSlidingTabStrip(Context context) {
 		this(context, null);
 	}

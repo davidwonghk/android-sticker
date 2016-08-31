@@ -1,6 +1,8 @@
 package com.easy.emotionsticker.fragment;
 
 
+import android.support.v4.app.Fragment;
+
 import com.easy.emotionsticker.callback.StickerCallback;
 import com.easy.emotionsticker.helper.ResourcesRepository;
 
@@ -18,17 +20,24 @@ public class StickerFragmentListBuilder {
 		this.resourcesRepository = resourcesRepository;
 	}
 
-	public List<StickerFragment> build(StickerCallback callback) {
-		List<StickerFragment> list = new ArrayList<>();
+	public List<Fragment> build(Fragment contentPage, StickerCallback callback) {
+		List<Fragment> list = new ArrayList<>();
+		list.add(contentPage);
 
 		for (String tab : resourcesRepository.getTabsOrder()) {
-			StickerFragment fragment = new StickerFragment();
-			fragment.setTabName(tab);
-			fragment.setCallback(callback);
-			fragment.setResourcesRepository(resourcesRepository);
+			StickerFragment fragment = createStickerFragment(tab, callback);
 			list.add(fragment);
 		}
 
 		return list;
+	}
+
+
+	StickerFragment createStickerFragment(String tabName, StickerCallback callback) {
+		StickerFragment fragment = new StickerFragment();
+		fragment.setTabName(tabName);
+		fragment.setCallback(callback);
+		fragment.setResourcesRepository(resourcesRepository);
+		return fragment;
 	}
 }

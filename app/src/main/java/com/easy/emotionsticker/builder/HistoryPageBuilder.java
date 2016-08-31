@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.easy.emotionsticker.R;
 import com.easy.emotionsticker.callback.StickerCallback;
@@ -44,7 +43,7 @@ public class HistoryPageBuilder extends GridPageBuilder<StickerCallback> {
 			Log.d(TAG, h);
 
 			Uri iconUri = resourcesRepository.getDrawableUri(h);
-			ImageView icon = new ZoomSquareImageView(activity);
+			ImageView icon = new ZoomSquareImageView(context);
 			icon.setImageURI(iconUri);
 
 			icon.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +78,7 @@ public class HistoryPageBuilder extends GridPageBuilder<StickerCallback> {
 		btnClearHistory.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new AlertDialog.Builder(activity)
+				new AlertDialog.Builder(context)
 						.setTitle(R.string.alert_title)
 						.setMessage(R.string.alert_clear_history)
 						.setNegativeButton(R.string.CANCEL, new DialogInterface.OnClickListener() {

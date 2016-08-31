@@ -26,10 +26,12 @@ public class DeviceStatusChecker {
 			return false;
 		}
 
+		/*
 		if (false == isAppInstalled("com.whatsapp")) {
 			new MyAlertDialog(context, R.string.alert_title, R.string.alert_whatsapp).show();
 			return false;
 		}
+		*/
 
 		return true;
 	}

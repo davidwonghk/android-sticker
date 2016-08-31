@@ -1,16 +1,13 @@
 package com.easy.emotionsticker.builder;
 
 import android.app.Activity;
+import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
-import com.easy.emotionsticker.R;
 import com.easy.emotionsticker.helper.ResourcesRepository;
 import com.easy.emotionsticker.image.SquareImageView;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 /**
  * Created by david.wong on 01/07/2016.
@@ -36,7 +33,7 @@ public class ContentPageBuilder extends GridPageBuilder<ContentPageBuilder.OnCat
 		for (int i=0; i<tabs.length; ++i) {
 			String tab = tabs[i];
 			int iconId = resourcesRepository.getIconResId(tab);
-			ImageView icon = new SquareImageView(activity);
+			ImageView icon = new SquareImageView(context);
 			icon.setImageResource(iconId);
 			icon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 			icon.setPadding(MARGIN_H, MARGIN_V, MARGIN_H, MARGIN_V);
@@ -54,7 +51,7 @@ public class ContentPageBuilder extends GridPageBuilder<ContentPageBuilder.OnCat
 		}
 	}
 
-	public void buildHomeButton(View btnHome, final SlidingUpPanelLayout slidingLayout) {
+	public void buildHomeButton(View btnHome, final ViewPager pager) {
 		//set the button size
 		resizeMenuItem(btnHome);
 
@@ -62,15 +59,7 @@ public class ContentPageBuilder extends GridPageBuilder<ContentPageBuilder.OnCat
 		btnHome.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
-				switch(slidingLayout.getPanelState()) {
-					case EXPANDED:
-						slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-						break;
-					case COLLAPSED:
-						slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-						break;
-				}
+				pager.setCurrentItem(0);
 			}
 		});
 	}

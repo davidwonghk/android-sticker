@@ -8,7 +8,7 @@
     android:fillViewport="false"
     android:measureAllChildren="true"
     android:layout_centerHorizontal="true"
-    android:layout_above="@+id/adView">
+    android:layout_above="@+id/menu_bar">
 
 
 		<ImageView

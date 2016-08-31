@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:stretchMode="columnWidth"
+              android:columnCount="3">
+
+	<com.easy.emotionsticker.image.SquareImageView
+		android:padding="20px"
+		android:id="@+id/btn_whatsapp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/btn_whatsapp"/>
+
+	<com.easy.emotionsticker.image.SquareImageView
+		android:padding="20px"
+		android:id="@+id/btn_wechat"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/btn_wechat"/>
+
+	<com.easy.emotionsticker.image.SquareImageView
+		android:padding="20px"
+		android:id="@+id/btn_sms"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/btn_sms"/>
+
+	<com.easy.emotionsticker.image.SquareImageView
+		android:padding="20px"
+		android:id="@+id/btn_fb"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/btn_fb"/>
+
+	<com.easy.emotionsticker.image.SquareImageView
+		android:padding="20px"
+		android:id="@+id/btn_hangout"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/btn_hangout"/>
+
+	<com.easy.emotionsticker.image.SquareImageView
+		android:padding="20px"
+		android:id="@+id/btn_other"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/btn_other"/>
+
+
+
+</GridLayout>

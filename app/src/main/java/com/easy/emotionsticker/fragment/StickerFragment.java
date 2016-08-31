@@ -17,12 +17,6 @@ public class StickerFragment extends BaseFragment {
 	private final static int NUM_COL = 4;
 
 
-	//TODO: use arguemtn bundle istead of setter
-	@Override
-	public String toString() {
-		return tabName;
-	}
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		final View view = inflater.inflate(R.layout.sticker_tab, container, false);
