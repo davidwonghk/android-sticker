@@ -6,7 +6,11 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Created by david.wong on 20/07/2016.
@@ -15,13 +19,14 @@ public class StickerHistory {
 	private final static String KEY = "historys";
 	private final static String SEP = ";";
 	private SharedPreferences settings;
-	private OnHistoryChangeCallback callback;
+	private Map<String, OnHistoryChangeCallback> callbacks = new HashMap<>();
 
 
 	public StickerHistory(SharedPreferences settings) {
 		this.settings = settings;
 	}
 
+	synchronized
 	public List<String> get() {
 		String historyStr = settings.getString(KEY, null);
 		if (historyStr == null) return new ArrayList<>();
@@ -32,6 +37,7 @@ public class StickerHistory {
 	}
 
 
+	synchronized
 	public void add(String resName) {
 		Log.d(KEY, "save history: " + resName);
 		List<String> historyList = new ArrayList<>();
@@ -45,20 +51,26 @@ public class StickerHistory {
 		settings.edit().putString(KEY, toSave).commit();
 
 		Log.d(KEY, "toSave=" + toSave);
-		if (callback!=null) callback.onHistoryChange(this);
+		for(OnHistoryChangeCallback cb: callbacks.values()) {
+			cb.onHistoryChange(this);
+		}
 	}
 
+	synchronized
 	public void clear() {
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putString(KEY, null);
 		editor.commit();
 
-		if (callback!=null) callback.onHistoryChange(this);
+		for(OnHistoryChangeCallback cb: callbacks.values()) {
+			cb.onHistoryChange(this);
+		}
 	}
 
 
-	public void setOnHistoryChange(OnHistoryChangeCallback callback) {
-		this.callback = callback;
+	public void addOnHistoryChange(String name, OnHistoryChangeCallback callback) {
+		if (callbacks.containsKey(name)) return;
+		this.callbacks.put(name, callback);
 	}
 
 	public interface OnHistoryChangeCallback {

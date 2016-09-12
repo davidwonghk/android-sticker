@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">Messager Emotion Sticker</string>
+    <string name="app_name">Messenger Emotion Sticker</string>
 
-    <string name="action_end">End</string>
-    <string name="action_customize">Customize</string>
+    <string name="action_home">Home</string>
+	<string name="action_history">History</string>
+	<string name="action_customize">Customize</string>
+	<string name="action_end">End</string>
 
 
     <!-- -
@@ -11,10 +13,6 @@
     <!- -->
     <string name="interstitial_ad_unit_id">ca-app-pub-3050996155258099/9602332563</string>
     <string name="banner_ad_unit_id">ca-app-pub-3050996155258099/6646499762</string>
-	<!--
-    <string name="interstitial_ad_sample">Whatsapp Emotion Sticker</string>
-    <string name="toast_text">If you like our app, please feel free to buy the pro version with more stickers and features</string>
-    -->
 
 	<string name="intent_title">Send</string>
 	<string name="app_pick_title">Send To...</string>
@@ -24,15 +22,15 @@
 	<string name="alert_clear_history">Clear the sticker history?</string>
 	<string name="alert_title">Warning</string>
     <string name="alert_internet">Please check your internet connection</string>
-	<string name="alert_whatsapp">Whatsapp Messenger need to be installed before using this app</string>
-	<string name="alert_wechat">Wechat Messenger need to be installed before using this app</string>
-	<string name="alert_line">Line Messenger need to be installed before using this app</string>
-	<string name="alert_facebook">Facebook Messenger need to be installed before using this app</string>
-	<string name="alert_hangout">Google Hangout need to be installed before using this app</string>
+	<string name="alert_install">need to be installed before using this app</string>
+	<string name="alert_setting">At least one application should be chosen</string>
+
+	<string name="name_sms">SMS</string>
+	<string name="name_other">Other</string>
 
 	<string name="OK">OK</string>
 	<string name="CANCEL">Cancel</string>
-
+	<string name="SAVE">Save</string>
 
 	<integer name="menu_size">100</integer>
 

@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.easy.emotionsticker.fragment.ContentPageFragment;
+import com.easy.emotionsticker.fragment.HistoryPageFragment;
 import com.easy.emotionsticker.fragment.StickerFragment;
 import com.easy.emotionsticker.helper.ResourcesRepository;
 
@@ -25,6 +26,10 @@ class StickerPagerAdapter extends ListFragmentPagerAdapter implements PagerSlidi
 		if (fragment instanceof ContentPageFragment) {
 			return R.drawable.category;
 		}
+		if (fragment instanceof HistoryPageFragment) {
+			return R.drawable.history;
+		}
+
 		final String tabName = fragment.toString();
 		return resourcesRepository.getIconResId(tabName);
 	}

@@ -1,6 +1,7 @@
 package com.easy.emotionsticker.callback;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.easy.emotionsticker.AppPickDialog;
@@ -9,6 +10,7 @@ import com.easy.emotionsticker.helper.AdHelper;
 import com.easy.emotionsticker.helper.DeviceStatusChecker;
 import com.easy.emotionsticker.helper.MyAlertDialog;
 import com.easy.emotionsticker.helper.StickerHistory;
+import com.easy.emotionsticker.pick.AppRepository;
 
 import java.util.Random;
 
@@ -22,12 +24,14 @@ public class StickerCallbackImpl implements StickerCallback {
 	private Context context;
 	private StickerHistory history;
 	private DeviceStatusChecker checker;
+	private AppRepository appRepository;
 	private AdHelper ad;
 
-	public StickerCallbackImpl(Context context, StickerHistory history, AdHelper ad) {
+	public StickerCallbackImpl(Context context, StickerHistory history, AppRepository appRepository, AdHelper ad) {
 		this.context = context;
 		this.history = history;
 		this.checker = new DeviceStatusChecker(context);
+		this.appRepository = appRepository;
 		this.ad = ad;
 	}
 
@@ -45,16 +49,18 @@ public class StickerCallbackImpl implements StickerCallback {
 		try {
 			history.add(resName); //save history
 		} catch (Throwable t) {
+			t.printStackTrace();
 			Toast.makeText(context, context.getString(R.string.alert_save_history), Toast.LENGTH_SHORT).show();
 		}
 
 		safeShowAd(50);
 
 		try {
-			new AppPickDialog(context, resName).show();
+			new AppPickDialog(context, appRepository.getActiveApplications(), resName).show();
 			//sendSticker(resName);
 		} catch (Throwable t) {
 			// prompt alert dialog
+			t.printStackTrace();
 			new MyAlertDialog(context, R.string.alert_title, R.string.alert_internet).show();
 		}
 

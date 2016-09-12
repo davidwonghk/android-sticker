@@ -20,9 +20,11 @@ public class StickerFragmentListBuilder {
 		this.resourcesRepository = resourcesRepository;
 	}
 
-	public List<Fragment> build(Fragment contentPage, StickerCallback callback) {
+	public List<Fragment> build(StickerCallback callback, Fragment... fragments) {
 		List<Fragment> list = new ArrayList<>();
-		list.add(contentPage);
+		for (Fragment f: fragments) {
+			list.add(f);
+		}
 
 		for (String tab : resourcesRepository.getTabsOrder()) {
 			StickerFragment fragment = createStickerFragment(tab, callback);

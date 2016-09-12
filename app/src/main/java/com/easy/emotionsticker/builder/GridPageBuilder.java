@@ -14,8 +14,12 @@ import com.easy.emotionsticker.helper.ScreenHelper;
  *
  * provide template methods to hep build page
  */
-abstract class GridPageBuilder<Callback> {
+public abstract class GridPageBuilder<Callback> {
 	protected Context context;
+
+	protected final static int MARGIN_H = 0;
+	protected final static int MARGIN_V = 0;
+	protected final static int NUM_COL = 4;
 
 	public GridPageBuilder(Context context) {
 		this.context = context;
@@ -30,8 +34,11 @@ abstract class GridPageBuilder<Callback> {
 		return new ViewGroup.LayoutParams(screen.getWidth()/numCol-marginSum, screen.getHeight()/numCol-marginSum);
 	}
 
-
 	protected void resizeMenuItem(View view) {
+		resizeMenuItem(context, view);
+	}
+
+	public static void resizeMenuItem(Context context, View view) {
 		int s = context.getResources().getInteger(R.integer.menu_size);
 
 		ViewGroup.LayoutParams layoutParams = view.getLayoutParams();

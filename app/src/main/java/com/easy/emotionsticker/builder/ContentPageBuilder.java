@@ -14,9 +14,6 @@ import com.easy.emotionsticker.image.SquareImageView;
  */
 public class ContentPageBuilder extends GridPageBuilder<ContentPageBuilder.OnCategorySelectCallback> {
 
-	private final static int MARGIN_H = 0;
-	private final static int MARGIN_V = 0;
-	private final static int NUM_COL = 4;
 
 
 	private ResourcesRepository resourcesRepository;

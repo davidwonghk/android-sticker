@@ -33,10 +33,10 @@ public class HistoryPageBuilder extends GridPageBuilder<StickerCallback> {
 		this.history = history;
 	}
 
-	@Override
-	public void build(final GridLayout grid, final StickerCallback callback) {
-		Log.d(TAG, "build history page");
 
+	synchronized
+	public void buildMenubar(final GridLayout grid, final StickerCallback callback) {
+		Log.d(TAG, "build history menu bar");
 		grid.removeAllViews();
 
 		for (final String h : history.get()) {
@@ -52,15 +52,47 @@ public class HistoryPageBuilder extends GridPageBuilder<StickerCallback> {
 					callback.onStickerSelect(h);
 				}
 			});
-
-
 			resizeMenuItem(icon);
 			grid.addView(icon);
 
 		}
 
-		//setup history callbakc
-		history.setOnHistoryChange(new StickerHistory.OnHistoryChangeCallback() {
+		history.addOnHistoryChange("menu", new StickerHistory.OnHistoryChangeCallback() {
+			@Override
+			public void onHistoryChange(StickerHistory history) {
+				buildMenubar(grid, callback);
+			}
+		});
+	}
+
+	@Override
+	synchronized
+	public void build(final GridLayout grid, final StickerCallback callback) {
+		Log.d(TAG, "build history page");
+		grid.removeAllViews();
+
+		for (final String h : history.get()) {
+			Log.d(TAG, h);
+
+			Uri iconUri = resourcesRepository.getDrawableUri(h);
+			ImageView icon = new ZoomSquareImageView(context);
+			icon.setImageURI(iconUri);
+
+			icon.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					callback.onStickerSelect(h);
+				}
+			});
+			icon.setScaleType(ImageView.ScaleType.FIT_XY);
+			icon.setPadding(10, 10, 10, 10);
+			icon.setLayoutParams(getGridLayoutParams(NUM_COL, 10, 10));
+			grid.addView(icon);
+
+		}
+
+		//setup history callback
+		history.addOnHistoryChange("page", new StickerHistory.OnHistoryChangeCallback() {
 			@Override
 			public void onHistoryChange(StickerHistory history) {
 				build(grid, callback);

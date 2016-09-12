@@ -14,6 +14,7 @@ public class BaseFragment extends Fragment {
 	protected String tabName;
 	protected StickerCallback callback;
 
+
 	public void setResourcesRepository(ResourcesRepository resourcesRepository) {
 		this.resourcesRepository = resourcesRepository;
 	}

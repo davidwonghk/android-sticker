@@ -1,13 +1,11 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
-<!--
-    <item android:id="@+id/action_customize" android:title="@string/action_customize"
-        android:orderInCategory="100" app:showAsAction="never" />
--->
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/action_end" android:title="@string/action_end"
-        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_home" android:title="@string/action_home" android:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_history" android:title="@string/action_history" />
+    <item android:id="@+id/action_customize" android:title="@string/action_customize" />
+    <item android:id="@+id/action_end" android:title="@string/action_end" />
 
 
 
