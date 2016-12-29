@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.easy.emotionsticker.builder.ContentPageBuilder;
@@ -26,6 +27,7 @@ import com.easy.emotionsticker.helper.ScreenHelper;
 import com.easy.emotionsticker.helper.SettingsHelper;
 import com.easy.emotionsticker.helper.StickerHistory;
 import com.easy.emotionsticker.pick.AppRepository;
+import com.facebook.FacebookSdk;
 import com.google.android.gms.ads.AdView;
 
 import java.util.List;
@@ -33,11 +35,14 @@ import java.util.List;
 
 /*TODO:
 - increase stickers image quality
+- slice image to reduce overall app size
 - marketing
 	- video turtail
+	- like to unlock
+	- add like button
 
 - new UI
-	- turtial page
+	- tutortial page
 	- manifier on select
 	- loadiing/updating page when first start
 */
@@ -79,12 +84,17 @@ public class MainActivity extends FragmentActivity {
 	    final AdView adView = (AdView) findViewById(R.id.adView);
 	    this.ad = new AdHelper(this, adView);
 
+
+
 	    //create helper components
 	    this.settings = SettingsHelper.getSharedPreferences(this);
 	    this.history = new StickerHistory(settings);
 
 	    //init sticker callback
 	    this.stickerCallback = new StickerCallbackImpl(this, history, appRepository, ad);
+
+	    //init facebook sdk
+	    FacebookSdk.sdkInitialize(getApplicationContext());
 
 	    //init UI
 	    initViewPager(settings);
@@ -120,6 +130,11 @@ public class MainActivity extends FragmentActivity {
     }
 
 
+	@Override
+	protected  void onDestroy() {
+		ad.destroy();
+		super.onDestroy();
+	}
 
 
     //-----------------------------------------------------------------------------
@@ -200,6 +215,7 @@ public class MainActivity extends FragmentActivity {
 		HistoryPageFragment fragment = new HistoryPageFragment();
 		fragment.setHistoryPageBuilder(builder);
 		fragment.setCallback(stickerCallback);
+		fragment.setAdHelper(ad);
 
 		//setup the history bar
 		final GridLayout grid = (GridLayout)findViewById(R.id.history_bar);

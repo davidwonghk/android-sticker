@@ -15,6 +15,8 @@ import com.easy.emotionsticker.helper.ResourcesRepository;
 import com.easy.emotionsticker.helper.StickerHistory;
 import com.easy.emotionsticker.image.ZoomSquareImageView;
 
+
+
 /**
  * Created by david.wong on 01/07/2016.
  */
@@ -26,6 +28,7 @@ public class HistoryPageBuilder extends GridPageBuilder<StickerCallback> {
 
 	private StickerHistory history;
 	private ResourcesRepository resourcesRepository;
+
 
 	public HistoryPageBuilder(Activity activity, ResourcesRepository resourcesRepository, StickerHistory history) {
 		super(activity);
@@ -91,6 +94,8 @@ public class HistoryPageBuilder extends GridPageBuilder<StickerCallback> {
 
 		}
 
+		grid.refreshDrawableState();
+
 		//setup history callback
 		history.addOnHistoryChange("page", new StickerHistory.OnHistoryChangeCallback() {
 			@Override
@@ -127,5 +132,7 @@ public class HistoryPageBuilder extends GridPageBuilder<StickerCallback> {
 			}
 		});
 	}
+
+
 
 }

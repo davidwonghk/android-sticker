@@ -10,6 +10,8 @@ import android.widget.GridLayout;
 import com.easy.emotionsticker.R;
 import com.easy.emotionsticker.builder.HistoryPageBuilder;
 import com.easy.emotionsticker.callback.StickerCallback;
+import com.easy.emotionsticker.helper.AdHelper;
+
 
 /**
  * Created by david on 02/09/2016.
@@ -17,6 +19,7 @@ import com.easy.emotionsticker.callback.StickerCallback;
 public class HistoryPageFragment extends Fragment {
 	private HistoryPageBuilder builder;
 	private StickerCallback callback;
+	private AdHelper ad;
 
 	public void setHistoryPageBuilder(HistoryPageBuilder builder) {
 		this.builder = builder;
@@ -25,6 +28,8 @@ public class HistoryPageFragment extends Fragment {
 	public void setCallback(StickerCallback callback) {
 		this.callback = callback;
 	}
+
+	public void setAdHelper(AdHelper ad) { this.ad = ad; }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
@@ -39,12 +44,18 @@ public class HistoryPageFragment extends Fragment {
 			}
 		});
 
+		//load facebook ad
+		ViewGroup adViewContainer = (ViewGroup) view.findViewById(R.id.adViewContainer);
+		ad.loadFacebookAd(adViewContainer);
+
 		return view;
 	}
+
 
 	@Override
 	public String toString() {
 		return "history";
 	}
+
 
 }

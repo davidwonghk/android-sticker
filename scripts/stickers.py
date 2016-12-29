@@ -6,11 +6,11 @@ import math
 import logging
 from PIL import Image, ImageDraw
 
-SIZE = 128, 128
-ICON_SIZE = 32, 32
+SIZE = 256,256
+ICON_SIZE = 64,64 
 MARGIN = 15
 WIDTH = 4
-TYPE = 'jpg'
+TYPE = 'gif'
 
 
 def create_if_empty(directory):
@@ -23,7 +23,7 @@ def create_thumbnail(old_path, new_path, size):
         print "trim %s to %s"%(old_path, new_path)
         im = Image.open(old_path)
         im.thumbnail(size, Image.ANTIALIAS)
-        im.save(new_path, optimize=True,quality=80)
+        im.save(new_path, optimize=True,quality=100)
     except IOError:
         logging.error( "cannot create thumbnail for '%s'" % old_path)
 

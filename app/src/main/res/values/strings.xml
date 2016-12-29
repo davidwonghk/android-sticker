@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Messenger Emotion Sticker</string>
+	<string name="app_url">https://play.google.com/store/apps/details?id=com.easy.emotionsticker</string>
 
     <string name="action_home">Home</string>
 	<string name="action_history">History</string>
@@ -13,6 +14,8 @@
     <!- -->
     <string name="interstitial_ad_unit_id">ca-app-pub-3050996155258099/9602332563</string>
     <string name="banner_ad_unit_id">ca-app-pub-3050996155258099/6646499762</string>
+	<string name="banner_fb_unit_id">1324104267630991_1324111010963650</string>
+	<string name="test_device_id">5261c261676e50081c9d45f83e86a662</string>
 
 	<string name="intent_title">Send</string>
 	<string name="app_pick_title">Send To...</string>
@@ -27,6 +30,7 @@
 
 	<string name="name_sms">SMS</string>
 	<string name="name_other">Other</string>
+	<string name="title_history">History</string>
 
 	<string name="OK">OK</string>
 	<string name="CANCEL">Cancel</string>

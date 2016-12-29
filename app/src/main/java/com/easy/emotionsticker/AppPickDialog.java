@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.easy.emotionsticker.image.SquareImageView;
 import com.easy.emotionsticker.pick.AppPick;
+import com.facebook.share.widget.LikeView;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class AppPickDialog extends Dialog {
 		super.setTitle(R.string.app_pick_title);
 
 		setupView(apps, resName);
+		setupLikeButton();
 	}
 
 
@@ -39,6 +41,13 @@ public class AppPickDialog extends Dialog {
 			layout.addView(image);
 		}
 
+	}
+
+	private void setupLikeButton() {
+		final String appUrl = getContext().getString(R.string.app_url);
+
+		LikeView likeView = (LikeView) findViewById(R.id.like_view);
+		likeView.setObjectIdAndType( appUrl, LikeView.ObjectType.PAGE );
 	}
 
 	@Override

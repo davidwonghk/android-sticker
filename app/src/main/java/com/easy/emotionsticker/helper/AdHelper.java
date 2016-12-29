@@ -1,12 +1,17 @@
 package com.easy.emotionsticker.helper;
 
 import android.content.Context;
+import android.preference.Preference;
+import android.view.ViewGroup;
 
 import com.easy.emotionsticker.R;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.facebook.ads.AdSize;
+import com.facebook.ads.AdSettings;
+
 
 /**
  * Created by david on 6/5/2016.
@@ -16,11 +21,34 @@ public class AdHelper {
 	//-----------------------------------------------------------------------------
 	//Advertisement
 
+	private Context context;
 	private InterstitialAd mInterstitialAd;
 
 	public AdHelper(Context context, AdView adView) {
-		createBanner(adView);
-		createIntertitalAd(context);
+		this.context = context;
+		AdSettings.addTestDevice(context.getString(R.string.test_device_id));
+		if (adView != null) {
+			createBanner(adView);
+			createIntertitalAd(context);
+		}
+		createFacebookBanner(context);
+	}
+
+
+	private com.facebook.ads.AdView createFacebookBanner(Context context) {
+		final String fbUnitId = context.getString(R.string.banner_fb_unit_id);
+		return new com.facebook.ads.AdView(context, fbUnitId, AdSize.BANNER_320_50);
+	}
+
+
+	public void loadFacebookAd(ViewGroup adViewContainer) {
+		if (adViewContainer.getChildCount() > 0) {
+			adViewContainer.removeAllViews();
+		}
+
+		com.facebook.ads.AdView fbView = createFacebookBanner(context);
+		adViewContainer.addView(fbView);
+		fbView.loadAd();
 	}
 
 
@@ -52,6 +80,9 @@ public class AdHelper {
 	public void show() {
 		loadInterstitial();
 		showInterstitial();
+	}
+
+	public void destroy() {
 	}
 
 	private void showInterstitial() {

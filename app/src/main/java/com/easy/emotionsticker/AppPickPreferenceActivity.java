@@ -73,6 +73,11 @@ public class AppPickPreferenceActivity extends PreferenceActivity {
 		@Override
 		public void onResume() {
 			super.onResume();
+
+			if (targetCategory.getPreferenceCount() > 0) {
+				targetCategory.removeAll();
+			}
+
 			for(AppPick a : applications) {
 				CheckBoxPreference c = new CheckBoxPreference(getActivity());
 				c.setIcon(a.getIcon());
