@@ -1,4 +1,4 @@
-package com.easy.emotionsticker;
+package com.easy.emotionsticker.preference;
 
 import android.app.Activity;
 import android.content.Context;

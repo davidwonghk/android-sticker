@@ -23,7 +23,6 @@ public class AppPickDialog extends Dialog {
 		super.setTitle(R.string.app_pick_title);
 
 		setupView(apps, resName);
-		setupLikeButton();
 	}
 
 
@@ -43,12 +42,6 @@ public class AppPickDialog extends Dialog {
 
 	}
 
-	private void setupLikeButton() {
-		final String appUrl = getContext().getString(R.string.app_url);
-
-		LikeView likeView = (LikeView) findViewById(R.id.like_view);
-		likeView.setObjectIdAndType( appUrl, LikeView.ObjectType.PAGE );
-	}
 
 	@Override
 	public void show() {

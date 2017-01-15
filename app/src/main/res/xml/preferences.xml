@@ -3,7 +3,9 @@
 	<PreferenceCategory android:title="Applications to send stickers" android:key="TARGET_CATEGORY">
 	</PreferenceCategory>
 
+
+	<com.easy.emotionsticker.preference.FacebookLikeBtnPreference android:layout="@layout/button_like"/>
 	<Preference android:layout="@layout/button_save" android:key="btn_save"/>
-	<com.easy.emotionsticker.FacebookAdPreference android:layout="@layout/ad_layout"/>
+	<com.easy.emotionsticker.preference.FacebookAdPreference android:layout="@layout/ad_layout"/>
 
 </PreferenceScreen>

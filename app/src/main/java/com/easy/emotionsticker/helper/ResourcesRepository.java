@@ -43,6 +43,8 @@ public class ResourcesRepository {
 			"moon", "work", "mad", "brown", "bye",
 			"cry", "cute", "special", "drunk",
 			"cat1", "cat2", "cat3", "dog",
+			"rabbit1", "rabbit2", "rabbit3", "rabbit4",
+			"bunny", "thik",
 			"oldlady", "milk", "sushi", "wechat",
 			"love", "kiss", "hug", "heart", "disheart",
 			"red", "purple", "blue", "green", "pink",
@@ -111,7 +113,12 @@ public class ResourcesRepository {
 		add("cat2", R.drawable.cat2_tab, R.drawable.cat2_merge, 32);
 		add("dog", R.drawable.dog_tab, R.drawable.dog_merge, 44);
 		add("cry", R.drawable.cry_tab, R.drawable.cry_merge, 18);
-
+		add("rabbit4", R.drawable.rabbit4_tab, R.drawable.rabbit4_merge, 30);
+		add("rabbit3", R.drawable.rabbit3_tab, R.drawable.rabbit3_merge, 16);
+		add("rabbit2", R.drawable.rabbit2_tab, R.drawable.rabbit2_merge, 40);
+		add("rabbit1", R.drawable.rabbit1_tab, R.drawable.rabbit1_merge, 12);
+		add("thik", R.drawable.thik_tab, R.drawable.thik_merge, 16);
+		add("bunny", R.drawable.bunny_tab, R.drawable.bunny_merge, 16);
 
 	}
 
