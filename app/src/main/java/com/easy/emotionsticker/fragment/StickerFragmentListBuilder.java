@@ -1,8 +1,10 @@
 package com.easy.emotionsticker.fragment;
 
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import com.easy.emotionsticker.builder.StickerPageBuilder;
 import com.easy.emotionsticker.callback.StickerCallback;
 import com.easy.emotionsticker.helper.ResourcesRepository;
 
@@ -14,10 +16,12 @@ import java.util.List;
  */
 public class StickerFragmentListBuilder {
 	private ResourcesRepository resourcesRepository;
+	private StickerPageBuilder pageBuilder;
 
 
-	public StickerFragmentListBuilder(ResourcesRepository resourcesRepository) {
+	public StickerFragmentListBuilder(Context context, ResourcesRepository resourcesRepository) {
 		this.resourcesRepository = resourcesRepository;
+		this.pageBuilder = new StickerPageBuilder(context, resourcesRepository);
 	}
 
 	public List<Fragment> build(StickerCallback callback, Fragment... fragments) {
@@ -39,7 +43,7 @@ public class StickerFragmentListBuilder {
 		StickerFragment fragment = new StickerFragment();
 		fragment.setTabName(tabName);
 		fragment.setCallback(callback);
-		fragment.setResourcesRepository(resourcesRepository);
+		fragment.setStickerPageBuilder(pageBuilder);
 		return fragment;
 	}
 }

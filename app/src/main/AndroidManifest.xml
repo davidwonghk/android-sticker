@@ -20,6 +20,10 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -38,9 +42,10 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
 
+
         <provider
-            android:name="com.commonsware.cwac.provider.StreamProvider"
             android:authorities="com.easy.emotionsticker"
+            android:name="com.commonsware.cwac.provider.StreamProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

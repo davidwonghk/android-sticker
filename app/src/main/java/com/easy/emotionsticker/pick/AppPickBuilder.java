@@ -16,13 +16,15 @@ import com.easy.emotionsticker.helper.ResourcesRepository;
  */
 class AppPickBuilder {
 	protected Context context;
+	private ResourcesRepository resourcesRepository;
 
 	private Context getContext() {
 		return this.context;
 	}
 
-	public AppPickBuilder(Context context) {
+	public AppPickBuilder(Context context, ResourcesRepository resourcesRepository) {
 		this.context = context;
+		this.resourcesRepository = resourcesRepository;
 	}
 
 
@@ -97,8 +99,8 @@ class AppPickBuilder {
 	}
 
 
-	private static Intent createSendIntent(String resName) {
-		final Uri uri = ResourcesRepository.getDrawableUri(resName);
+	private Intent createSendIntent(String resName) {
+		final Uri uri = resourcesRepository.getSticker(resName);
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
 		sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
 		sendIntent.setType("image/jpeg");

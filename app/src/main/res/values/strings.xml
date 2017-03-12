@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Messenger Emotion Sticker</string>
 	<string name="app_url">https://play.google.com/store/apps/details?id=com.easy.emotionsticker</string>
+	<string name="facebook_app_id">1324104267630991</string>
 
     <string name="action_home">Home</string>
 	<string name="action_history">History</string>

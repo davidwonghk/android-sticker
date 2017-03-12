@@ -19,12 +19,12 @@ package com.astuetz;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -49,7 +49,7 @@ import com.easy.emotionsticker.R;
 public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	public interface IconTabProvider {
-		public int getPageIconResId(int position);
+		public Uri getPageIcon(int position);
 	}
 
 	// @formatter:off
@@ -199,7 +199,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		for (int i = 0; i < tabCount; i++) {
 
 			if (pager.getAdapter() instanceof IconTabProvider) {
-				addIconTab(i, ((IconTabProvider) pager.getAdapter()).getPageIconResId(i));
+				addIconTab(i, ((IconTabProvider) pager.getAdapter()).getPageIcon(i));
 			} else {
 				addTextTab(i, pager.getAdapter().getPageTitle(i).toString());
 			}
@@ -238,11 +238,17 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		addTab(position, tab);
 	}
 
-	private void addIconTab(final int position, int resId) {
+	private void addIconTab(final int position, Uri uri) {
 
 
 		ImageButton tab = new ImageButton(getContext());
-		tab.setImageResource(resId);
+		String path = uri.toString();
+		if (path.startsWith("drawable://")) {
+			int resId = Integer.valueOf(path.substring(11));
+			tab.setImageResource(resId);
+		} else {
+			tab.setImageURI(uri);
+		}
 
 		addTab(position, tab);
 

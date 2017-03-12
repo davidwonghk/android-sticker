@@ -28,7 +28,7 @@ public class ContentPageFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 
-		final View view = inflater.inflate(R.layout.content_page, container, false);
+		final View view = inflater.inflate(R.layout.sticker_tab, container, false);
 
 		final GridLayout grid = (GridLayout)view.findViewById(R.id.content_grid);
 		builder.build(grid, callback);

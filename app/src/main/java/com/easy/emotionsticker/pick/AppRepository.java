@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.easy.emotionsticker.R;
+import com.easy.emotionsticker.helper.ResourcesRepository;
 import com.easy.emotionsticker.helper.SettingsHelper;
 
 import java.util.ArrayList;
@@ -18,10 +19,10 @@ public class AppRepository {
 	private List<AppPick> applications;
 	private AppPickBuilder builder;
 
-	public AppRepository(Context context) {
+	public AppRepository(Context context, ResourcesRepository resourcesRepository) {
 		this.context = context;
 		this.applications = new ArrayList<>();
-		this.builder = new AppPickBuilder(context);
+		this.builder = new AppPickBuilder(context, resourcesRepository);
 
 		setup();
 	}

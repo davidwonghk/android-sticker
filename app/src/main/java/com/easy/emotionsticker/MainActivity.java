@@ -78,7 +78,7 @@ public class MainActivity extends FragmentActivity {
 	    this.resourcesRepository = new ResourcesRepository();
 
 	    //create application repository
-	    this.appRepository = new AppRepository(this);
+	    this.appRepository = new AppRepository(this, resourcesRepository);
 
 	    //init advertisement
 	    final AdView adView = (AdView) findViewById(R.id.adView);
@@ -150,7 +150,7 @@ public class MainActivity extends FragmentActivity {
 	    Fragment contentPage = createContentPage(mViewPager);
 	    Fragment historyPage = createHistoryPage(mViewPager);
 
-	    StickerFragmentListBuilder listBuilder = new StickerFragmentListBuilder(resourcesRepository);
+	    StickerFragmentListBuilder listBuilder = new StickerFragmentListBuilder(this, resourcesRepository);
 	    List<? extends Fragment> fragmentList = listBuilder.build(stickerCallback, contentPage, historyPage);
 
 	    mViewPager.setAdapter(new StickerPagerAdapter(resourcesRepository, getSupportFragmentManager(), fragmentList));

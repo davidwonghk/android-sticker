@@ -6,11 +6,11 @@ import math
 import logging
 from PIL import Image, ImageDraw
 
-SIZE = 256,256
-ICON_SIZE = 64,64 
+SIZE = (256,256)
+ICON_SIZE = 64,64
 MARGIN = 15
 WIDTH = 4
-TYPE = 'gif'
+TYPE = 'jpeg'
 
 
 def create_if_empty(directory):
@@ -36,6 +36,8 @@ def create_icon(old_path, new_path, size):
         logging.error ("cannot create tab icon for '%s'" % old_path)
 
 def create_merge_image(target_dir, group_name, list, width):
+    target_dir = os.path.join(target_dir, 'merge')
+
     height = math.ceil(len(list) / float(width))
     height = int(height)
     ms = SIZE[0]/2
@@ -54,13 +56,9 @@ def create_merge_image(target_dir, group_name, list, width):
         j = (f / width) * (ms+MARGIN) + MARGIN
         merge_im.paste(im, (i,j))
         f = f + 1
-        #if i == MARGIN:
-        #    draw.line((0,j, merge_width, j), fill=0, width=1)
-        #if j == MARGIN:
-        #    draw.line((i,0, i, merge_height), fill=0, width=1)
 
         merge_path = os.path.join(target_dir, "%s_merge.%s"%(group_name, TYPE))
-        merge_im.save(merge_path, optimize=True,quality=95)
+        merge_im.save(merge_path, quality=100)
 
 
 
@@ -71,6 +69,9 @@ target_dir = sys.argv[2]
 
 
 create_if_empty(target_dir)
+create_if_empty(os.path.join(target_dir, "sticker"))
+create_if_empty(os.path.join(target_dir, "tab"))
+create_if_empty(os.path.join(target_dir, "merge"))
 
 for d, _, _ in os.walk(src_dir):
     if d == src_dir:
@@ -85,12 +86,12 @@ for d, _, _ in os.walk(src_dir):
     for f in os.listdir(d):
         old_path = os.path.join(d, f)
         if os.path.isfile(old_path):
-            new_path = os.path.join(target_dir, "%s_%i.%s"%(dir_only, i, TYPE))
+            new_path = os.path.join(target_dir, "sticker", "%s_%i.%s"%(dir_only, i, TYPE))
             create_thumbnail(old_path, new_path, SIZE)
 
             if i==0:
                 #create the tab icon
-                tab_path = os.path.join(target_dir, "%s_tab.%s"%(dir_only, TYPE))
+                tab_path = os.path.join(target_dir, "tab", "%s_tab.%s"%(dir_only, TYPE))
                 create_icon(old_path, tab_path, ICON_SIZE)
 
             i += 1

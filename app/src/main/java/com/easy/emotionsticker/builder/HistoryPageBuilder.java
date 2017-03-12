@@ -45,7 +45,7 @@ public class HistoryPageBuilder extends GridPageBuilder<StickerCallback> {
 		for (final String h : history.get()) {
 			Log.d(TAG, h);
 
-			Uri iconUri = resourcesRepository.getDrawableUri(h);
+			Uri iconUri = resourcesRepository.getSticker(h);
 			ImageView icon = new ZoomSquareImageView(context);
 			icon.setImageURI(iconUri);
 
@@ -77,20 +77,20 @@ public class HistoryPageBuilder extends GridPageBuilder<StickerCallback> {
 		for (final String h : history.get()) {
 			Log.d(TAG, h);
 
-			Uri iconUri = resourcesRepository.getDrawableUri(h);
-			ImageView icon = new ZoomSquareImageView(context);
-			icon.setImageURI(iconUri);
+			Uri stickerUri = resourcesRepository.getSticker(h);
+			ImageView sticker = new ZoomSquareImageView(context);
+			sticker.setImageURI(stickerUri);
 
-			icon.setOnClickListener(new View.OnClickListener() {
+			sticker.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					callback.onStickerSelect(h);
 				}
 			});
-			icon.setScaleType(ImageView.ScaleType.FIT_XY);
-			icon.setPadding(10, 10, 10, 10);
-			icon.setLayoutParams(getGridLayoutParams(NUM_COL, 10, 10));
-			grid.addView(icon);
+			sticker.setScaleType(ImageView.ScaleType.FIT_XY);
+			sticker.setPadding(10, 10, 10, 10);
+			sticker.setLayoutParams(getGridLayoutParams(NUM_COL, 10, 10));
+			grid.addView(sticker);
 
 		}
 

@@ -8,7 +8,6 @@ import android.widget.ImageView;
 
 import com.easy.emotionsticker.image.SquareImageView;
 import com.easy.emotionsticker.pick.AppPick;
-import com.facebook.share.widget.LikeView;
 
 import java.util.List;
 
