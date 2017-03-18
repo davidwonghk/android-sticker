@@ -93,9 +93,6 @@ public class MainActivity extends FragmentActivity {
 	    //init sticker callback
 	    this.stickerCallback = new StickerCallbackImpl(this, history, appRepository, ad);
 
-	    //init facebook sdk
-	    FacebookSdk.sdkInitialize(getApplicationContext());
-
 	    //init UI
 	    initViewPager(settings);
 	    initSettingButton();
@@ -150,8 +147,8 @@ public class MainActivity extends FragmentActivity {
 	    Fragment contentPage = createContentPage(mViewPager);
 	    Fragment historyPage = createHistoryPage(mViewPager);
 
-	    StickerFragmentListBuilder listBuilder = new StickerFragmentListBuilder(this, resourcesRepository);
-	    List<? extends Fragment> fragmentList = listBuilder.build(stickerCallback, contentPage, historyPage);
+	    StickerFragmentListBuilder listBuilder = new StickerFragmentListBuilder(this, resourcesRepository, stickerCallback);
+	    List<? extends Fragment> fragmentList = listBuilder.build(contentPage, historyPage);
 
 	    mViewPager.setAdapter(new StickerPagerAdapter(resourcesRepository, getSupportFragmentManager(), fragmentList));
 

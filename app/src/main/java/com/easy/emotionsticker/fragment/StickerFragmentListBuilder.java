@@ -2,6 +2,7 @@ package com.easy.emotionsticker.fragment;
 
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.easy.emotionsticker.builder.StickerPageBuilder;
@@ -16,22 +17,22 @@ import java.util.List;
  */
 public class StickerFragmentListBuilder {
 	private ResourcesRepository resourcesRepository;
-	private StickerPageBuilder pageBuilder;
 
 
-	public StickerFragmentListBuilder(Context context, ResourcesRepository resourcesRepository) {
+	public StickerFragmentListBuilder(Context context, ResourcesRepository resourcesRepository, StickerCallback callback) {
 		this.resourcesRepository = resourcesRepository;
-		this.pageBuilder = new StickerPageBuilder(context, resourcesRepository);
+		StickerFragment.setStickerPageBuilder(new StickerPageBuilder(context, resourcesRepository));
+		StickerFragment.setCallback(callback);
 	}
 
-	public List<Fragment> build(StickerCallback callback, Fragment... fragments) {
+	public List<Fragment> build(Fragment... fragments) {
 		List<Fragment> list = new ArrayList<>();
 		for (Fragment f: fragments) {
 			list.add(f);
 		}
 
 		for (String tab : resourcesRepository.getTabsOrder()) {
-			StickerFragment fragment = createStickerFragment(tab, callback);
+			StickerFragment fragment = createStickerFragment(tab);
 			list.add(fragment);
 		}
 
@@ -39,11 +40,11 @@ public class StickerFragmentListBuilder {
 	}
 
 
-	StickerFragment createStickerFragment(String tabName, StickerCallback callback) {
+	StickerFragment createStickerFragment(String tabName) {
 		StickerFragment fragment = new StickerFragment();
-		fragment.setTabName(tabName);
-		fragment.setCallback(callback);
-		fragment.setStickerPageBuilder(pageBuilder);
+		Bundle bundle = new Bundle();
+		bundle.putString("tabName", tabName);
+		fragment.setArguments(bundle);
 		return fragment;
 	}
 }
