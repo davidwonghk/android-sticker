@@ -31,25 +31,8 @@ public class AdHelper {
 			createBanner(adView);
 			createIntertitalAd(context);
 		}
-		createFacebookBanner(context);
 	}
 
-
-	private com.facebook.ads.AdView createFacebookBanner(Context context) {
-		final String fbUnitId = context.getString(R.string.banner_fb_unit_id);
-		return new com.facebook.ads.AdView(context, fbUnitId, AdSize.BANNER_320_50);
-	}
-
-
-	public void loadFacebookAd(ViewGroup adViewContainer) {
-		if (adViewContainer.getChildCount() > 0) {
-			adViewContainer.removeAllViews();
-		}
-
-		com.facebook.ads.AdView fbView = createFacebookBanner(context);
-		adViewContainer.addView(fbView);
-		fbView.loadAd();
-	}
 
 
 	private void createBanner(AdView adView) {
