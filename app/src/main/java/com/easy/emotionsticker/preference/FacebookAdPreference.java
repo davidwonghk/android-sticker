@@ -7,14 +7,15 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.easy.emotionsticker.helper.AdHelper;
+import com.easy.emotionsticker.CentralManager;
+import com.easy.emotionsticker.MainActivity;
+import com.facebook.ads.AdView;
 
 /**
  * Created by david on 27/12/2016.
  */
 
 public class FacebookAdPreference extends Preference {
-
 
 	public FacebookAdPreference(Context context, AttributeSet attrs, int defStyle) {super    (context, attrs, defStyle);}
 	public FacebookAdPreference(Context context, AttributeSet attrs) {super(context, attrs);}
@@ -27,11 +28,11 @@ public class FacebookAdPreference extends Preference {
 		View view = super.onCreateView(parent);
 
 		// the context is a PreferenceActivity
-		Activity activity = (Activity)getContext();
-		AdHelper ad = new AdHelper(activity, null);
-
-		// Create the adView
-		ad.loadFacebookAd((ViewGroup)view);
+		Context context = getContext();
+		if (context instanceof CentralManager) {
+			// Create the adView
+			((CentralManager) context).getAdHelper().loadFacebookAd((ViewGroup)view);
+		}
 
 		return view;
 	}

@@ -31,7 +31,7 @@ public class AdHelper {
 			createBanner(adView);
 			createIntertitalAd(context);
 		}
-		createFacebookBanner(context);
+
 	}
 
 
@@ -78,8 +78,11 @@ public class AdHelper {
 	}
 
 	public void show() {
-		loadInterstitial();
-		showInterstitial();
+		try {
+			loadInterstitial();
+			showInterstitial();
+		} catch(Throwable e) {
+		}
 	}
 
 	public void destroy() {

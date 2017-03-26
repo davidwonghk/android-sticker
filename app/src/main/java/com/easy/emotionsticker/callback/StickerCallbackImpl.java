@@ -1,18 +1,14 @@
 package com.easy.emotionsticker.callback;
 
 import android.content.Context;
-import android.util.Log;
+import android.net.Uri;
 import android.widget.Toast;
 
 import com.easy.emotionsticker.AppPickDialog;
+import com.easy.emotionsticker.CentralManager;
 import com.easy.emotionsticker.R;
-import com.easy.emotionsticker.helper.AdHelper;
 import com.easy.emotionsticker.helper.DeviceStatusChecker;
 import com.easy.emotionsticker.helper.MyAlertDialog;
-import com.easy.emotionsticker.helper.StickerHistory;
-import com.easy.emotionsticker.pick.AppRepository;
-
-import java.util.Random;
 
 /**
  * Created by david.wong on 19/06/2016.
@@ -21,42 +17,34 @@ import java.util.Random;
 
 public class StickerCallbackImpl implements StickerCallback {
 
-	private Context context;
-	private StickerHistory history;
 	private DeviceStatusChecker checker;
-	private AppRepository appRepository;
-	private AdHelper ad;
+	private CentralManager manager;
 
-	public StickerCallbackImpl(Context context, StickerHistory history, AppRepository appRepository, AdHelper ad) {
-		this.context = context;
-		this.history = history;
-		this.checker = new DeviceStatusChecker(context);
-		this.appRepository = appRepository;
-		this.ad = ad;
+	public StickerCallbackImpl(CentralManager manager) {
+		this.manager = manager;
+		this.checker = new DeviceStatusChecker(manager.getContext());
 	}
 
-	private void safeShowAd(int chance) {
-		try {
-			if (new Random().nextInt(100) < chance) { ad.show(); }
-		} catch(Throwable t) {}
-	}
 
 	public void onStickerSelect(String resName) {
 		if (checker.preStickerCheck() == false) {
 			return;
 		}
 
+		final Context context = manager.getContext();
+
 		try {
-			history.add(resName); //save history
+			manager.getHistory().add(resName); //save history
 		} catch (Throwable t) {
 			t.printStackTrace();
 			Toast.makeText(context, context.getString(R.string.alert_save_history), Toast.LENGTH_SHORT).show();
 		}
 
-		safeShowAd(50);
+		//safeShowAd(50);
 
 		try {
-			new AppPickDialog(context, appRepository.getActiveApplications(), resName).show();
+			Uri uri = manager.getResourcesRepository().getSticker(resName);
+			new AppPickDialog(context, manager.getAppRepository(), uri).show();
 			//sendSticker(resName);
 		} catch (Throwable t) {
 			// prompt alert dialog
@@ -64,7 +52,7 @@ public class StickerCallbackImpl implements StickerCallback {
 			new MyAlertDialog(context, R.string.alert_title, R.string.alert_internet).show();
 		}
 
-		safeShowAd(35);
+		//safeShowAd(100);
 	}
 
 

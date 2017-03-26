@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
+import com.easy.emotionsticker.CentralManager;
 import com.easy.emotionsticker.R;
 import com.easy.emotionsticker.callback.StickerCallback;
 import com.easy.emotionsticker.helper.ResourcesRepository;
@@ -30,10 +31,10 @@ public class HistoryPageBuilder extends GridPageBuilder<StickerCallback> {
 	private ResourcesRepository resourcesRepository;
 
 
-	public HistoryPageBuilder(Activity activity, ResourcesRepository resourcesRepository, StickerHistory history) {
-		super(activity);
-		this.resourcesRepository = resourcesRepository;
-		this.history = history;
+	public HistoryPageBuilder(CentralManager manager) {
+		super(manager.getContext());
+		this.resourcesRepository = manager.getResourcesRepository();
+		this.history = manager.getHistory();
 	}
 
 

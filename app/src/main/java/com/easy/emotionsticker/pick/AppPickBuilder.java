@@ -16,15 +16,13 @@ import com.easy.emotionsticker.helper.ResourcesRepository;
  */
 class AppPickBuilder {
 	protected Context context;
-	private ResourcesRepository resourcesRepository;
 
 	private Context getContext() {
 		return this.context;
 	}
 
-	public AppPickBuilder(Context context, ResourcesRepository resourcesRepository) {
+	public AppPickBuilder(Context context) {
 		this.context = context;
-		this.resourcesRepository = resourcesRepository;
 	}
 
 
@@ -34,7 +32,7 @@ class AppPickBuilder {
 			@Override public String getAppName() { return appName; }
 
 			@Override
-			public void sendToApplication(String sticker) throws ActivityNotFoundException {
+			public void sendToApplication(Uri sticker) throws ActivityNotFoundException {
 				sendToIntent(appName, sticker, packageName);
 			}
 
@@ -47,7 +45,7 @@ class AppPickBuilder {
 			@Override public String getAppName() { return getContext().getString(R.string.name_sms); }
 
 			@Override
-			public void sendToApplication(String sticker) throws ActivityNotFoundException {
+			public void sendToApplication(Uri sticker) throws ActivityNotFoundException {
 				try {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 						String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(getContext());
@@ -73,7 +71,7 @@ class AppPickBuilder {
 			@Override public String getAppName() { return getContext().getString(R.string.name_other); }
 
 			@Override
-			public void sendToApplication(String sticker) throws ActivityNotFoundException {
+			public void sendToApplication(Uri sticker) throws ActivityNotFoundException {
 				Intent sendIntent = createSendIntent(sticker);
 				try {
 					getContext().startActivity(sendIntent);
@@ -84,7 +82,7 @@ class AppPickBuilder {
 		};
 	}
 
-	private void sendToIntent(String appName, String resName, String packageName) {
+	private void sendToIntent(String appName, Uri resName, String packageName) {
 		Intent sendIntent = createSendIntent(resName);
 		sendIntent.setPackage(packageName);
 		sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PREFIX_URI_PERMISSION);
@@ -99,8 +97,7 @@ class AppPickBuilder {
 	}
 
 
-	private Intent createSendIntent(String resName) {
-		final Uri uri = resourcesRepository.getSticker(resName);
+	private Intent createSendIntent(Uri uri) {
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
 		sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
 		sendIntent.setType("image/jpeg");

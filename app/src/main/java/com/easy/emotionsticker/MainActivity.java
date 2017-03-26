@@ -1,5 +1,6 @@
 package com.easy.emotionsticker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.easy.emotionsticker.builder.ContentPageBuilder;
@@ -27,7 +27,6 @@ import com.easy.emotionsticker.helper.ScreenHelper;
 import com.easy.emotionsticker.helper.SettingsHelper;
 import com.easy.emotionsticker.helper.StickerHistory;
 import com.easy.emotionsticker.pick.AppRepository;
-import com.facebook.FacebookSdk;
 import com.google.android.gms.ads.AdView;
 
 import java.util.List;
@@ -47,17 +46,18 @@ import java.util.List;
 	- loadiing/updating page when first start
 */
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements CentralManager {
 
-    private AdHelper ad;
     private ViewPager mViewPager;
     private PagerSlidingTabStrip mPagerSlidingTab;
 
-	private ResourcesRepository resourcesRepository;
 	private StickerCallback stickerCallback;
+
 	private SharedPreferences settings;
-	private StickerHistory history;
+	private AdHelper ad;
+	private ResourcesRepository resourcesRepository;
 	private AppRepository appRepository;
+	private StickerHistory history;
 
 
     @Override
@@ -70,28 +70,18 @@ public class MainActivity extends FragmentActivity {
 	    //setup screen helper
 	    ScreenHelper.setActivity(this);
 
-	    //check if network is on and whatsapp installed
-	    //DeviceStatusChecker checker = new DeviceStatusChecker(this);
-	    //checker.preStickerCheck();
+	    this.settings = SettingsHelper.getSharedPreferences(this);
 
-	    //init all the component classes
-	    this.resourcesRepository = new ResourcesRepository();
-
-	    //create application repository
-	    this.appRepository = new AppRepository(this, resourcesRepository);
-
-	    //init advertisement
 	    final AdView adView = (AdView) findViewById(R.id.adView);
 	    this.ad = new AdHelper(this, adView);
 
-
-
-	    //create helper components
-	    this.settings = SettingsHelper.getSharedPreferences(this);
+	    this.resourcesRepository = new ResourcesRepository();
+	    this.appRepository = new AppRepository(this);
 	    this.history = new StickerHistory(settings);
 
+
 	    //init sticker callback
-	    this.stickerCallback = new StickerCallbackImpl(this, history, appRepository, ad);
+	    this.stickerCallback = new StickerCallbackImpl(this);
 
 	    //init UI
 	    initViewPager(settings);
@@ -105,9 +95,12 @@ public class MainActivity extends FragmentActivity {
     }
 
 
+
+
 	@Override
 	protected void onStart() {
 		super.onStart();
+
 		if (appRepository.getActiveApplications().isEmpty()) {
 			appRepository.setActive("WhatsApp Messenger", true);
 		}
@@ -187,13 +180,14 @@ public class MainActivity extends FragmentActivity {
 
 	private ContentPageFragment createContentPage(final ViewPager viewPager) {
 		assert(viewPager != null);
-		ContentPageBuilder builder = new ContentPageBuilder(this, resourcesRepository);
+		ContentPageBuilder builder = new ContentPageBuilder(this);
 
 		ContentPageFragment fragment = new ContentPageFragment();
 		fragment.setContentPageBuilder(builder);
 		fragment.setCallback(new ContentPageBuilder.OnCategorySelectCallback() {
 			@Override
 			public void onCategorySelect(int i) {
+				ad.show();
 				viewPager.setCurrentItem(i+2);
 			}
 		});
@@ -206,7 +200,7 @@ public class MainActivity extends FragmentActivity {
 
 	private HistoryPageFragment createHistoryPage(final ViewPager viewPager) {
 		assert(viewPager != null);
-		final HistoryPageBuilder builder = new HistoryPageBuilder(this, resourcesRepository, history);
+		final HistoryPageBuilder builder = new HistoryPageBuilder(this);
 
 		//setup the history page
 		HistoryPageFragment fragment = new HistoryPageFragment();
@@ -242,38 +236,14 @@ public class MainActivity extends FragmentActivity {
 		startActivity(i);
 	}
 
-	//-----------------------------------------------
-	//option menu
+	//-----------------------------------------------------------------------------
+	//implement central manager
 
-	/*
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_main, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		switch (item.getItemId()) {
-			case R.id.action_end:
-				finish();
-				System.exit(0);
-				return true;
-
-			case R.id.action_home:
-				mViewPager.setCurrentItem(0);
-				return true;
-
-			case R.id.action_customize:
-				Intent i = new Intent(this, AppPickPreferenceActivity.class);
-				i.putExtra(AppPickPreferenceActivity.BUNDLE_NAME, appRepository.toStringArray());
-				startActivity(i);
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-	*/
+	@Override public Context getContext() { return this; }
+	@Override public AdHelper getAdHelper() { return this.ad; }
+	@Override public StickerHistory getHistory() { return this.history; }
+	@Override public ResourcesRepository getResourcesRepository() { return this.resourcesRepository; }
+	@Override public AppRepository getAppRepository() { return this.appRepository; }
 
 }
 

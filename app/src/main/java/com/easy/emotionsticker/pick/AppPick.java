@@ -1,6 +1,7 @@
 package com.easy.emotionsticker.pick;
 
 import android.content.ActivityNotFoundException;
+import android.net.Uri;
 
 /**
  * Created by david on 31/08/2016.
@@ -8,5 +9,5 @@ import android.content.ActivityNotFoundException;
 public interface AppPick {
 	int getIcon();
 	String getAppName();
-	void sendToApplication(String sticker) throws ActivityNotFoundException;
+	void sendToApplication(Uri sticker) throws ActivityNotFoundException;
 }

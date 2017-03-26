@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
+import com.easy.emotionsticker.CentralManager;
 import com.easy.emotionsticker.helper.ResourcesRepository;
 import com.easy.emotionsticker.image.SquareImageView;
 
@@ -21,9 +22,9 @@ public class ContentPageBuilder extends GridPageBuilder<ContentPageBuilder.OnCat
 
 	private ResourcesRepository resourcesRepository;
 
-	public ContentPageBuilder(Activity activity, ResourcesRepository repo) {
-		super(activity);
-		this.resourcesRepository = repo;
+	public ContentPageBuilder(CentralManager manager) {
+		super(manager.getContext());
+		this.resourcesRepository = manager.getResourcesRepository();
 	}
 
 	@Override

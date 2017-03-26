@@ -9,6 +9,7 @@ import android.widget.GridLayout;
 
 import com.easy.emotionsticker.R;
 import com.easy.emotionsticker.builder.ContentPageBuilder;
+import com.easy.emotionsticker.helper.AdHelper;
 
 /**
  * Created by david.wong on 09/08/2016.
@@ -16,6 +17,7 @@ import com.easy.emotionsticker.builder.ContentPageBuilder;
 public class ContentPageFragment extends Fragment {
 	private ContentPageBuilder builder;
 	private ContentPageBuilder.OnCategorySelectCallback callback;
+
 
 	public void setContentPageBuilder(ContentPageBuilder builder) {
 		this.builder = builder;
@@ -35,6 +37,13 @@ public class ContentPageFragment extends Fragment {
 
 		return view;
 	}
+
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+			if (isVisibleToUser) {
+			}
+	}
+
 
 	@Override
 	public String toString() {
