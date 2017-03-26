@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
+import com.easy.emotionsticker.CentralManager;
 import com.easy.emotionsticker.helper.ResourcesRepository;
 import com.easy.emotionsticker.image.SquareImageView;
 
@@ -15,16 +16,20 @@ import com.easy.emotionsticker.image.SquareImageView;
 
 public class StickerPageBuilder extends GridPageBuilder<StickerPageHandle> {
 
-	private ResourcesRepository resourcesRepository;
+	private final static int MARGIN = 15;
 
-	public StickerPageBuilder(Context context, ResourcesRepository repo) {
-		super(context);
-		this.resourcesRepository = repo;
+	private CentralManager manager;
+
+	public StickerPageBuilder(CentralManager manager) {
+		this.manager = manager;
 	}
 
 
 	@Override
 	public void build(GridLayout grid, final StickerPageHandle handle) {
+		final ResourcesRepository resourcesRepository = manager.getResourcesRepository();
+		final Context context = manager.getContext();
+
 		final int tabSize = resourcesRepository.getTabSize(handle.tabName);
 		for (int i=0; i<tabSize; ++i) {
 			final String stickerId = resourcesRepository.getStickerId(handle.tabName, i);
@@ -32,9 +37,9 @@ public class StickerPageBuilder extends GridPageBuilder<StickerPageHandle> {
 
 			ImageView icon = new SquareImageView(context);
 			icon.setImageURI(iconUri);
-			icon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-			icon.setPadding(MARGIN_H, MARGIN_V, MARGIN_H, MARGIN_V);
-			icon.setLayoutParams(getGridLayoutParams(NUM_COL, MARGIN_H, MARGIN_V));
+			icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+			icon.setPadding(MARGIN,MARGIN,MARGIN,MARGIN);
+			icon.setLayoutParams(getGridLayoutParams(NUM_COL));
 
 			icon.setOnClickListener(new View.OnClickListener() {
 				@Override

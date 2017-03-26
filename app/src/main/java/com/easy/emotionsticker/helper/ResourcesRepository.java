@@ -85,6 +85,7 @@ public class ResourcesRepository {
 		add("hug", 11);
 		add("heart", 7);
 		add("disheart", 8);
+		add("hungry", 8);
 		add("red", 17);
 		add("purple", 22);
 		add("blue", 37);

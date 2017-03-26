@@ -9,12 +9,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.GridLayout;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.easy.emotionsticker.builder.ContentPageBuilder;
-import com.easy.emotionsticker.builder.GridPageBuilder;
 import com.easy.emotionsticker.builder.HistoryPageBuilder;
 import com.easy.emotionsticker.callback.StickerCallback;
 import com.easy.emotionsticker.callback.StickerCallbackImpl;
@@ -27,6 +25,7 @@ import com.easy.emotionsticker.helper.ScreenHelper;
 import com.easy.emotionsticker.helper.SettingsHelper;
 import com.easy.emotionsticker.helper.StickerHistory;
 import com.easy.emotionsticker.pick.AppRepository;
+import com.facebook.FacebookSdk;
 import com.google.android.gms.ads.AdView;
 
 import java.util.List;
@@ -38,7 +37,6 @@ import java.util.List;
 - marketing
 	- video turtail
 	- like to unlock
-	- add like button
 
 - new UI
 	- tutortial page
@@ -70,6 +68,7 @@ public class MainActivity extends FragmentActivity implements CentralManager {
 	    //setup screen helper
 	    ScreenHelper.setActivity(this);
 
+	    FacebookSdk.sdkInitialize(this);
 	    this.settings = SettingsHelper.getSharedPreferences(this);
 
 	    final AdView adView = (AdView) findViewById(R.id.adView);
@@ -85,7 +84,7 @@ public class MainActivity extends FragmentActivity implements CentralManager {
 
 	    //init UI
 	    initViewPager(settings);
-	    initSettingButton();
+	    initMenuButtons();
 
 	    //first time alert
 	    if (settings.getBoolean("com.easy.emotionsticker.v3", true) ) {
@@ -140,7 +139,7 @@ public class MainActivity extends FragmentActivity implements CentralManager {
 	    Fragment contentPage = createContentPage(mViewPager);
 	    Fragment historyPage = createHistoryPage(mViewPager);
 
-	    StickerFragmentListBuilder listBuilder = new StickerFragmentListBuilder(this, resourcesRepository, stickerCallback);
+	    StickerFragmentListBuilder listBuilder = new StickerFragmentListBuilder(this, stickerCallback);
 	    List<? extends Fragment> fragmentList = listBuilder.build(contentPage, historyPage);
 
 	    mViewPager.setAdapter(new StickerPagerAdapter(resourcesRepository, getSupportFragmentManager(), fragmentList));
@@ -192,8 +191,6 @@ public class MainActivity extends FragmentActivity implements CentralManager {
 			}
 		});
 
-		builder.buildHomeButton(findViewById(R.id.btn_home), viewPager);
-
 		return fragment;
 	}
 
@@ -208,10 +205,6 @@ public class MainActivity extends FragmentActivity implements CentralManager {
 		fragment.setCallback(stickerCallback);
 		fragment.setAdHelper(ad);
 
-		//setup the history bar
-		final GridLayout grid = (GridLayout)findViewById(R.id.history_bar);
-		builder.buildMenubar(grid, stickerCallback);
-
 		//set up the history clear button
 		builder.buildClearButton(findViewById(R.id.btn_clear_history));
 
@@ -219,9 +212,26 @@ public class MainActivity extends FragmentActivity implements CentralManager {
 	}
 
 
-	private void initSettingButton() {
-		final ImageView btnSetting = (ImageView) findViewById(R.id.btn_setting);
-		GridPageBuilder.resizeMenuItem(this, btnSetting);
+	private void initMenuButtons() {
+		ScreenHelper screenHelper = ScreenHelper.getInstance();
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(screenHelper.getWidth()/4, 96);
+
+		findViewById(R.id.btn_clear_history).setLayoutParams(params);
+
+		View btnHome = findViewById(R.id.btn_home);
+		btnHome.setLayoutParams(params);
+		btnHome.setOnClickListener(new View.OnClickListener() {
+			   public void onClick(View v) { mViewPager.setCurrentItem(0); }
+	    });
+
+		View btnHistory = findViewById(R.id.btn_history);
+		btnHistory.setLayoutParams(params);
+		btnHistory.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) { mViewPager.setCurrentItem(1); }
+		});
+
+		View btnSetting = findViewById(R.id.btn_setting);
+		btnSetting.setLayoutParams(params);
 		btnSetting.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
