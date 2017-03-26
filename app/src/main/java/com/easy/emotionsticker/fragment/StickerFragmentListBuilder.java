@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.easy.emotionsticker.CentralManager;
 import com.easy.emotionsticker.builder.StickerPageBuilder;
 import com.easy.emotionsticker.callback.StickerCallback;
 import com.easy.emotionsticker.helper.ResourcesRepository;
@@ -16,12 +17,11 @@ import java.util.List;
  * Created by david.wong on 18/06/2016.
  */
 public class StickerFragmentListBuilder {
-	private ResourcesRepository resourcesRepository;
+	CentralManager manager;
 
-
-	public StickerFragmentListBuilder(Context context, ResourcesRepository resourcesRepository, StickerCallback callback) {
-		this.resourcesRepository = resourcesRepository;
-		StickerFragment.setStickerPageBuilder(new StickerPageBuilder(context, resourcesRepository));
+	public StickerFragmentListBuilder(CentralManager manager, StickerCallback callback) {
+		this.manager = manager;
+		StickerFragment.setStickerPageBuilder(new StickerPageBuilder(manager));
 		StickerFragment.setCallback(callback);
 	}
 
@@ -31,7 +31,7 @@ public class StickerFragmentListBuilder {
 			list.add(f);
 		}
 
-		for (String tab : resourcesRepository.getTabsOrder()) {
+		for (String tab : manager.getResourcesRepository().getTabsOrder()) {
 			StickerFragment fragment = createStickerFragment(tab);
 			list.add(fragment);
 		}

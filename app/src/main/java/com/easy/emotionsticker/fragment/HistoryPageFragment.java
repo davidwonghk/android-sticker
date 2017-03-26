@@ -45,10 +45,8 @@ public class HistoryPageFragment extends Fragment {
 		});
 
 		//load facebook ad
-		/*
 		ViewGroup adViewContainer = (ViewGroup) view.findViewById(R.id.adViewContainer);
 		ad.loadFacebookAd(adViewContainer);
-		*/
 
 		return view;
 	}

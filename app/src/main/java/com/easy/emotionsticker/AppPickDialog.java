@@ -2,12 +2,16 @@ package com.easy.emotionsticker;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.net.Uri;
 import android.view.View;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
+import com.easy.emotionsticker.helper.AdHelper;
 import com.easy.emotionsticker.image.SquareImageView;
 import com.easy.emotionsticker.pick.AppPick;
+import com.easy.emotionsticker.pick.AppRepository;
 
 import java.util.List;
 
@@ -16,29 +20,57 @@ import java.util.List;
  */
 public class AppPickDialog extends Dialog {
 
-	public AppPickDialog(Context context, List<AppPick> apps, final String resName) {
+	private AppRepository appRepository;
+
+	public AppPickDialog(Context context, AppRepository appRepository, final Uri resName) {
 		super(context);
 		super.setContentView(R.layout.pick_dialog);
 		super.setTitle(R.string.app_pick_title);
 
-		setupView(apps, resName);
+		this.appRepository = appRepository;
+		setupView(resName);
 	}
 
 
-	final static int PADDING = 30;
-	private void setupView(List<AppPick> apps, final String resName) {
+	private void setupView(final Uri resName) {
+		List<AppPick> activeApps = appRepository.getActiveApplications();
+		setupAppView(resName, activeApps);
+
+		ImageView imageDemo = (ImageView)findViewById(R.id.image_demo);
+		imageDemo.setImageURI(resName);
+
+		View btnMore = findViewById(R.id.btn_more);
+
+		final List<AppPick> allApps = appRepository.getAllApplications();
+		if (allApps.size() == activeApps.size()) {
+			btnMore.setVisibility(View.INVISIBLE);
+		}
+
+		btnMore.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				setupAppView(resName, allApps);
+				v.setVisibility(View.INVISIBLE);
+			}
+		});
+	}
+
+	private void setupAppView(final Uri resName, List<AppPick> apps) {
+		final int PADDING = 30;
 		GridLayout layout = (GridLayout)findViewById(R.id.grid_pickapp);
+		layout.removeAllViews();
 
 		for(final AppPick a: apps) {
 			ImageView image = new SquareImageView(getContext());
 			image.setPadding(PADDING,PADDING,PADDING,PADDING);
 			image.setImageResource(a.getIcon());
 			image.setOnClickListener(new View.OnClickListener() {
-				@Override public void onClick(View v) { a.sendToApplication(resName); }
+				@Override public void onClick(View v) {
+					a.sendToApplication(resName);
+				}
 			});
 			layout.addView(image);
 		}
-
 	}
 
 

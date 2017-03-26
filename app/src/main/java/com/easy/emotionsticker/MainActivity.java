@@ -1,5 +1,6 @@
 package com.easy.emotionsticker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,13 +9,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.GridLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.easy.emotionsticker.builder.ContentPageBuilder;
-import com.easy.emotionsticker.builder.GridPageBuilder;
 import com.easy.emotionsticker.builder.HistoryPageBuilder;
 import com.easy.emotionsticker.callback.StickerCallback;
 import com.easy.emotionsticker.callback.StickerCallbackImpl;
@@ -39,7 +37,6 @@ import java.util.List;
 - marketing
 	- video turtail
 	- like to unlock
-	- add like button
 
 - new UI
 	- tutortial page
@@ -47,17 +44,18 @@ import java.util.List;
 	- loadiing/updating page when first start
 */
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements CentralManager {
 
-    private AdHelper ad;
     private ViewPager mViewPager;
     private PagerSlidingTabStrip mPagerSlidingTab;
 
-	private ResourcesRepository resourcesRepository;
 	private StickerCallback stickerCallback;
+
 	private SharedPreferences settings;
-	private StickerHistory history;
+	private AdHelper ad;
+	private ResourcesRepository resourcesRepository;
 	private AppRepository appRepository;
+	private StickerHistory history;
 
 
     @Override
@@ -70,32 +68,23 @@ public class MainActivity extends FragmentActivity {
 	    //setup screen helper
 	    ScreenHelper.setActivity(this);
 
-	    //check if network is on and whatsapp installed
-	    //DeviceStatusChecker checker = new DeviceStatusChecker(this);
-	    //checker.preStickerCheck();
+	    FacebookSdk.sdkInitialize(this);
+	    this.settings = SettingsHelper.getSharedPreferences(this);
 
-	    //init all the component classes
-	    this.resourcesRepository = new ResourcesRepository();
-
-	    //create application repository
-	    this.appRepository = new AppRepository(this, resourcesRepository);
-
-	    //init advertisement
 	    final AdView adView = (AdView) findViewById(R.id.adView);
 	    this.ad = new AdHelper(this, adView);
 
-
-
-	    //create helper components
-	    this.settings = SettingsHelper.getSharedPreferences(this);
+	    this.resourcesRepository = new ResourcesRepository();
+	    this.appRepository = new AppRepository(this);
 	    this.history = new StickerHistory(settings);
 
+
 	    //init sticker callback
-	    this.stickerCallback = new StickerCallbackImpl(this, history, appRepository, ad);
+	    this.stickerCallback = new StickerCallbackImpl(this);
 
 	    //init UI
 	    initViewPager(settings);
-	    initSettingButton();
+	    initMenuButtons();
 
 	    //first time alert
 	    if (settings.getBoolean("com.easy.emotionsticker.v3", true) ) {
@@ -105,9 +94,12 @@ public class MainActivity extends FragmentActivity {
     }
 
 
+
+
 	@Override
 	protected void onStart() {
 		super.onStart();
+
 		if (appRepository.getActiveApplications().isEmpty()) {
 			appRepository.setActive("WhatsApp Messenger", true);
 		}
@@ -147,7 +139,7 @@ public class MainActivity extends FragmentActivity {
 	    Fragment contentPage = createContentPage(mViewPager);
 	    Fragment historyPage = createHistoryPage(mViewPager);
 
-	    StickerFragmentListBuilder listBuilder = new StickerFragmentListBuilder(this, resourcesRepository, stickerCallback);
+	    StickerFragmentListBuilder listBuilder = new StickerFragmentListBuilder(this, stickerCallback);
 	    List<? extends Fragment> fragmentList = listBuilder.build(contentPage, historyPage);
 
 	    mViewPager.setAdapter(new StickerPagerAdapter(resourcesRepository, getSupportFragmentManager(), fragmentList));
@@ -187,18 +179,17 @@ public class MainActivity extends FragmentActivity {
 
 	private ContentPageFragment createContentPage(final ViewPager viewPager) {
 		assert(viewPager != null);
-		ContentPageBuilder builder = new ContentPageBuilder(this, resourcesRepository);
+		ContentPageBuilder builder = new ContentPageBuilder(this);
 
 		ContentPageFragment fragment = new ContentPageFragment();
 		fragment.setContentPageBuilder(builder);
 		fragment.setCallback(new ContentPageBuilder.OnCategorySelectCallback() {
 			@Override
 			public void onCategorySelect(int i) {
+				ad.show();
 				viewPager.setCurrentItem(i+2);
 			}
 		});
-
-		builder.buildHomeButton(findViewById(R.id.btn_home), viewPager);
 
 		return fragment;
 	}
@@ -206,17 +197,13 @@ public class MainActivity extends FragmentActivity {
 
 	private HistoryPageFragment createHistoryPage(final ViewPager viewPager) {
 		assert(viewPager != null);
-		final HistoryPageBuilder builder = new HistoryPageBuilder(this, resourcesRepository, history);
+		final HistoryPageBuilder builder = new HistoryPageBuilder(this);
 
 		//setup the history page
 		HistoryPageFragment fragment = new HistoryPageFragment();
 		fragment.setHistoryPageBuilder(builder);
 		fragment.setCallback(stickerCallback);
 		fragment.setAdHelper(ad);
-
-		//setup the history bar
-		final GridLayout grid = (GridLayout)findViewById(R.id.history_bar);
-		builder.buildMenubar(grid, stickerCallback);
 
 		//set up the history clear button
 		builder.buildClearButton(findViewById(R.id.btn_clear_history));
@@ -225,9 +212,26 @@ public class MainActivity extends FragmentActivity {
 	}
 
 
-	private void initSettingButton() {
-		final ImageView btnSetting = (ImageView) findViewById(R.id.btn_setting);
-		GridPageBuilder.resizeMenuItem(this, btnSetting);
+	private void initMenuButtons() {
+		ScreenHelper screenHelper = ScreenHelper.getInstance();
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(screenHelper.getWidth()/4, 96);
+
+		findViewById(R.id.btn_clear_history).setLayoutParams(params);
+
+		View btnHome = findViewById(R.id.btn_home);
+		btnHome.setLayoutParams(params);
+		btnHome.setOnClickListener(new View.OnClickListener() {
+			   public void onClick(View v) { mViewPager.setCurrentItem(0); }
+	    });
+
+		View btnHistory = findViewById(R.id.btn_history);
+		btnHistory.setLayoutParams(params);
+		btnHistory.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) { mViewPager.setCurrentItem(1); }
+		});
+
+		View btnSetting = findViewById(R.id.btn_setting);
+		btnSetting.setLayoutParams(params);
 		btnSetting.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -242,38 +246,14 @@ public class MainActivity extends FragmentActivity {
 		startActivity(i);
 	}
 
-	//-----------------------------------------------
-	//option menu
+	//-----------------------------------------------------------------------------
+	//implement central manager
 
-	/*
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_main, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		switch (item.getItemId()) {
-			case R.id.action_end:
-				finish();
-				System.exit(0);
-				return true;
-
-			case R.id.action_home:
-				mViewPager.setCurrentItem(0);
-				return true;
-
-			case R.id.action_customize:
-				Intent i = new Intent(this, AppPickPreferenceActivity.class);
-				i.putExtra(AppPickPreferenceActivity.BUNDLE_NAME, appRepository.toStringArray());
-				startActivity(i);
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-	*/
+	@Override public Context getContext() { return this; }
+	@Override public AdHelper getAdHelper() { return this.ad; }
+	@Override public StickerHistory getHistory() { return this.history; }
+	@Override public ResourcesRepository getResourcesRepository() { return this.resourcesRepository; }
+	@Override public AppRepository getAppRepository() { return this.appRepository; }
 
 }
 

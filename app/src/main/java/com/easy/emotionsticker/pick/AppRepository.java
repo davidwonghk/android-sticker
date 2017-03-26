@@ -3,6 +3,7 @@ package com.easy.emotionsticker.pick;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 
 import com.easy.emotionsticker.R;
 import com.easy.emotionsticker.helper.ResourcesRepository;
@@ -19,15 +20,18 @@ public class AppRepository {
 	private List<AppPick> applications;
 	private AppPickBuilder builder;
 
-	public AppRepository(Context context, ResourcesRepository resourcesRepository) {
+	public AppRepository(Context context) {
 		this.context = context;
 		this.applications = new ArrayList<>();
-		this.builder = new AppPickBuilder(context, resourcesRepository);
+		this.builder = new AppPickBuilder(context);
 
 		setup();
 	}
 
 
+	public List<AppPick> getAllApplications() {
+		return this.applications;
+	}
 
 	public List<AppPick> getActiveApplications() {
 		List<AppPick> activeApplications = new ArrayList<>();
@@ -86,7 +90,7 @@ public class AppRepository {
 			list.add(new AppPick() {
 				@Override public int getIcon() { return Integer.parseInt(c[1]); }
 				@Override public String getAppName() { return c[0]; }
-				@Override public void sendToApplication(String sticker) throws ActivityNotFoundException { }
+				@Override public void sendToApplication(Uri sticker) throws ActivityNotFoundException { }
 			});
 		}
 		return list;

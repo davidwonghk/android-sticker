@@ -1,6 +1,6 @@
 package com.easy.emotionsticker.builder;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
+import com.easy.emotionsticker.CentralManager;
 import com.easy.emotionsticker.R;
 import com.easy.emotionsticker.callback.StickerCallback;
 import com.easy.emotionsticker.helper.ResourcesRepository;
@@ -24,49 +25,20 @@ public class HistoryPageBuilder extends GridPageBuilder<StickerCallback> {
 
 	private final static String TAG = "HistoryPageBuilder";
 
-	private final static int MARGIN = 0;
+	private final static int MARGIN = 15;
 
+	private Context context;
 	private StickerHistory history;
 	private ResourcesRepository resourcesRepository;
 
 
-	public HistoryPageBuilder(Activity activity, ResourcesRepository resourcesRepository, StickerHistory history) {
-		super(activity);
-		this.resourcesRepository = resourcesRepository;
-		this.history = history;
+	public HistoryPageBuilder(CentralManager manager) {
+		this.context = manager.getContext();
+		this.resourcesRepository = manager.getResourcesRepository();
+		this.history = manager.getHistory();
 	}
 
 
-	synchronized
-	public void buildMenubar(final GridLayout grid, final StickerCallback callback) {
-		Log.d(TAG, "build history menu bar");
-		grid.removeAllViews();
-
-		for (final String h : history.get()) {
-			Log.d(TAG, h);
-
-			Uri iconUri = resourcesRepository.getSticker(h);
-			ImageView icon = new ZoomSquareImageView(context);
-			icon.setImageURI(iconUri);
-
-			icon.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					callback.onStickerSelect(h);
-				}
-			});
-			resizeMenuItem(icon);
-			grid.addView(icon);
-
-		}
-
-		history.addOnHistoryChange("menu", new StickerHistory.OnHistoryChangeCallback() {
-			@Override
-			public void onHistoryChange(StickerHistory history) {
-				buildMenubar(grid, callback);
-			}
-		});
-	}
 
 	@Override
 	synchronized
@@ -88,8 +60,8 @@ public class HistoryPageBuilder extends GridPageBuilder<StickerCallback> {
 				}
 			});
 			sticker.setScaleType(ImageView.ScaleType.FIT_XY);
-			sticker.setPadding(10, 10, 10, 10);
-			sticker.setLayoutParams(getGridLayoutParams(NUM_COL, 10, 10));
+			sticker.setPadding(MARGIN, MARGIN, MARGIN, MARGIN);
+			sticker.setLayoutParams(getGridLayoutParams(NUM_COL));
 			grid.addView(sticker);
 
 		}
@@ -108,9 +80,6 @@ public class HistoryPageBuilder extends GridPageBuilder<StickerCallback> {
 	}
 
 	public void buildClearButton(View btnClearHistory) {
-		//set the button size
-		resizeMenuItem(btnClearHistory);
-
 		//set the onclick listener
 		btnClearHistory.setOnClickListener(new View.OnClickListener() {
 			@Override

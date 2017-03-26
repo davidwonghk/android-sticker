@@ -20,6 +20,7 @@
 
 	<string name="intent_title">Send</string>
 	<string name="app_pick_title">Send To...</string>
+	<string name="btn_more">More...</string>
 
 	<string name="alert_select_sticker">fail select sticker</string>
 	<string name="alert_save_history">fail save history</string>
