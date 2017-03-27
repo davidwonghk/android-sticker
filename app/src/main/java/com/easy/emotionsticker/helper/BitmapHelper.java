@@ -14,7 +14,7 @@ class BitmapHelper {
 		return (PROVIDER
 				.buildUpon()
 				.appendPath(StreamProvider.getUriPrefix(PACKAGE_NAME))
-				.appendPath("assets/" + path + ".jpeg")
+				.appendPath("assets/" + path)
 				.build());
 	}
 

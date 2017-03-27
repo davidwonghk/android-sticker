@@ -74,7 +74,7 @@ public class MainActivity extends FragmentActivity implements CentralManager {
 	    final AdView adView = (AdView) findViewById(R.id.adView);
 	    this.ad = new AdHelper(this, adView);
 
-	    this.resourcesRepository = new ResourcesRepository();
+	    this.resourcesRepository = new ResourcesRepository(this);
 	    this.appRepository = new AppRepository(this);
 	    this.history = new StickerHistory(settings);
 
