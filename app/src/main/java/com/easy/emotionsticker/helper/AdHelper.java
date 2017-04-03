@@ -12,6 +12,8 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.facebook.ads.AdSize;
 import com.facebook.ads.AdSettings;
 
+import java.util.Random;
+
 
 /**
  * Created by david on 6/5/2016.
@@ -77,6 +79,9 @@ public class AdHelper {
 	}
 
 	public void show() {
+		if (new Random().nextInt(2) == 0) {
+			return;
+		}
 		try {
 			loadInterstitial();
 			showInterstitial();

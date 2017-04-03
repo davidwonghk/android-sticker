@@ -18,7 +18,7 @@ android:layout_above="@+id/menu_bar">
 <com.astuetz.PagerSlidingTabStrip
 	android:id="@+id/tabs"
 	android:layout_width="match_parent"
-	android:layout_height="120px"
+	android:layout_height="150px"
 	android:background="#ffffff"
 	android:fillViewport="false"
 	android:paddingBottom="5dp"

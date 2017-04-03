@@ -38,12 +38,14 @@ import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Locale;
 
 import com.easy.emotionsticker.R;
+import com.easy.emotionsticker.image.SquareImageView;
 
 @SuppressWarnings("ResourceType")
 public class PagerSlidingTabStrip extends HorizontalScrollView {
@@ -241,7 +243,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 	private void addIconTab(final int position, Uri uri) {
 
 
-		ImageButton tab = new ImageButton(getContext());
+		ImageView tab = new ImageView(getContext());
+		tab.setScaleType(ImageView.ScaleType.FIT_XY);
+		tab.setAdjustViewBounds(true);
 		String path = uri.toString();
 		if (path.startsWith("drawable://")) {
 			int resId = Integer.valueOf(path.substring(11));

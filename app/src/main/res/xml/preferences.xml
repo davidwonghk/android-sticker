@@ -5,5 +5,6 @@
 
 
 	<Preference android:layout="@layout/button_save" android:key="btn_save"/>
+	<com.easy.emotionsticker.preference.FacebookAdPreference android:layout="@layout/ad_layout"/>
 
 </PreferenceScreen>
