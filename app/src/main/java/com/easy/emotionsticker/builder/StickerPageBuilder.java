@@ -40,6 +40,7 @@ public class StickerPageBuilder {
 			final String stickerId = resourcesRepository.getStickerId(tabName, i);
 
 			ImageView icon = new SquareImageView(context);
+			icon.setImageURI(resourcesRepository.getSticker(stickerId));
 			icon = StickerImage.process(icon);
 			icon.setOnClickListener(new View.OnClickListener() {
 				@Override

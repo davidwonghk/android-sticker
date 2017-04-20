@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.easy.emotionsticker.AppPickDialog;
 import com.easy.emotionsticker.CentralManager;
 import com.easy.emotionsticker.R;
+import com.easy.emotionsticker.helper.AdHelper;
 import com.easy.emotionsticker.helper.DeviceStatusChecker;
 import com.easy.emotionsticker.helper.MyAlertDialog;
 
@@ -40,7 +41,7 @@ public class StickerCallbackImpl implements StickerCallback {
 			Toast.makeText(context, context.getString(R.string.alert_save_history), Toast.LENGTH_SHORT).show();
 		}
 
-		//safeShowAd(50);
+		safeShowAd();
 
 		try {
 			Uri uri = manager.getResourcesRepository().getSticker(resName);
@@ -52,7 +53,12 @@ public class StickerCallbackImpl implements StickerCallback {
 			new MyAlertDialog(context, R.string.alert_title, R.string.alert_internet).show();
 		}
 
-		//safeShowAd(100);
+		safeShowAd();
+	}
+
+
+	private void safeShowAd() {
+		manager.getAdHelper().show();
 	}
 
 

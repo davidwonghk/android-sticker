@@ -13,7 +13,9 @@ import com.easy.emotionsticker.builder.StickerPageBuilder;
 import com.easy.emotionsticker.callback.StickerCallback;
 import com.easy.emotionsticker.helper.ResourcesRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by david on 20/04/2017.
@@ -28,7 +30,9 @@ public class StickerPagerAdapter extends PagerAdapter implements PagerSlidingTab
 	private HistoryPageBuilder historyPageBuilder;
 	private ContentPageBuilder contentPageBuilder;
 	private StickerPageBuilder stickerPageBuilder;
+
 	private View contentView, historyView;
+	private Map<String, View> stickerViews;
 
 	private ContentPageBuilder.OnCategorySelectCallback onCategorySelectCallback;
 	private StickerCallback stickerCallback;
@@ -41,6 +45,8 @@ public class StickerPagerAdapter extends PagerAdapter implements PagerSlidingTab
 		this.historyPageBuilder = new HistoryPageBuilder(manager);
 		this.contentPageBuilder = new ContentPageBuilder(manager);
 		this.stickerPageBuilder = new StickerPageBuilder(manager);
+
+		this.stickerViews = new HashMap<>();
 	}
 
 	@Override
@@ -62,7 +68,7 @@ public class StickerPagerAdapter extends PagerAdapter implements PagerSlidingTab
 			case 1: return getHistoryView(container);
 			default: {
 				final String tabName = stickerTabs.get(position-2);
-				return stickerPageBuilder.createView(inflater, container,  tabName, stickerCallback);
+				return getStickerView(container, tabName);
 			}
 		}
 	}
@@ -70,25 +76,42 @@ public class StickerPagerAdapter extends PagerAdapter implements PagerSlidingTab
 	private View getContentView(ViewGroup container) {
 		if (contentView != null) return contentView;
 		this.contentView = contentPageBuilder.createView(inflater, container, onCategorySelectCallback);
+		contentView.setTag("content");
 		return contentView;
 	}
 
 	private View getHistoryView(ViewGroup container) {
 		if (historyView != null) return historyView;
 		this.historyView = historyPageBuilder.createView(inflater, container, stickerCallback);
+		historyView.setTag("history");
 		return historyView;
+	}
+
+	private View getStickerView(ViewGroup container, String tabName) {
+		View view = stickerViews.get(tabName);
+		if (view != null) return view;
+
+		view = stickerPageBuilder.createView(inflater, container,  tabName, stickerCallback);
+		view.setTag(tabName);
+		stickerViews.put(tabName, view);
+		return view;
 	}
 
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
-
+		if (false == object instanceof View) return;
+		View view = (View) object;
+		if (view.getParent() == container) {
+			container.removeView(view);
+		}
 	}
 
 
 	@Override
 	public boolean isViewFromObject(View view, Object object) {
-		return view == object;
+		if (false == object instanceof View) return false;
+		return view.getTag() == ((View)object).getTag();
 	}
 
 
