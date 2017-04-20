@@ -1,54 +1,62 @@
 package com.easy.emotionsticker.builder;
 
 import android.content.Context;
-import android.net.Uri;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import com.easy.emotionsticker.CentralManager;
+import com.easy.emotionsticker.R;
+import com.easy.emotionsticker.callback.StickerCallback;
 import com.easy.emotionsticker.helper.ResourcesRepository;
 import com.easy.emotionsticker.image.SquareImageView;
+import com.easy.emotionsticker.image.StickerImage;
+
+import static com.easy.emotionsticker.helper.ScreenHelper.getGridLayoutParams;
 
 /**
- * Created by david on 12/03/2017.
+ * Created by david.wong on 18/06/2016.
  */
+public class StickerPageBuilder {
 
-public class StickerPageBuilder extends GridPageBuilder<StickerPageHandle> {
+	private static CentralManager manager;
 
-	private final static int MARGIN = 15;
-
-	private CentralManager manager;
 
 	public StickerPageBuilder(CentralManager manager) {
 		this.manager = manager;
 	}
 
-
-	@Override
-	public void build(GridLayout grid, final StickerPageHandle handle) {
+	public View createView(LayoutInflater inflater, ViewGroup container, final String tabName, final StickerCallback callback) {
 		final ResourcesRepository resourcesRepository = manager.getResourcesRepository();
 		final Context context = manager.getContext();
 
-		final int tabSize = resourcesRepository.getTabSize(handle.tabName);
-		for (int i=0; i<tabSize; ++i) {
-			final String stickerId = resourcesRepository.getStickerId(handle.tabName, i);
-			Uri iconUri = resourcesRepository.getSticker(stickerId);
+		final View view = inflater.inflate(R.layout.sticker_tab, container, false);
+		GridLayout grid = (GridLayout) view.findViewById(R.id.content_grid);
+
+		final int size = resourcesRepository.getTabSize(tabName);
+		for(int i=0; i<size; ++i) {
+			final String stickerId = resourcesRepository.getStickerId(tabName, i);
 
 			ImageView icon = new SquareImageView(context);
-			icon.setImageURI(iconUri);
-			icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
-			icon.setPadding(MARGIN,MARGIN,MARGIN,MARGIN);
-			icon.setLayoutParams(getGridLayoutParams(NUM_COL));
-
+			icon = StickerImage.process(icon);
 			icon.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					handle.callback.onStickerSelect(stickerId);
+					callback.onStickerSelect(stickerId);
 				}
 			});
 
 			grid.addView(icon);
 		}
+
+		return view;
+
 	}
+
+
+
+
 }
+

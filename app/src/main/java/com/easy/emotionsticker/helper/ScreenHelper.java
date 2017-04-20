@@ -2,6 +2,7 @@ package com.easy.emotionsticker.helper;
 
 import android.app.Activity;
 import android.graphics.Point;
+import android.view.ViewGroup;
 
 /**
  * Created by david.wong on 16/08/2016.
@@ -23,9 +24,15 @@ public class ScreenHelper {
 		instance.point = getScreenSize(activity);
 	}
 
+	public static ViewGroup.LayoutParams getGridLayoutParams(int numCol) {
+		ScreenHelper screen = ScreenHelper.getInstance();
+		return new ViewGroup.LayoutParams(screen.getWidth()/numCol, screen.getHeight()/numCol);
+	}
+
 	private static Point getScreenSize(Activity activity) {
 		Point size = new Point();
 		activity.getWindowManager().getDefaultDisplay().getSize(size);
 		return size;
 	}
+
 }

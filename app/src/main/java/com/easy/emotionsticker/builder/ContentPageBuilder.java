@@ -2,9 +2,10 @@ package com.easy.emotionsticker.builder;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
@@ -13,14 +14,12 @@ import com.easy.emotionsticker.R;
 import com.easy.emotionsticker.helper.ResourcesRepository;
 import com.easy.emotionsticker.image.SquareGifImageView;
 import com.easy.emotionsticker.image.SquareImageView;
+import com.easy.emotionsticker.image.StickerImage;
 
 import java.util.List;
 
-import pl.droidsonroids.gif.GifImageView;
+public class ContentPageBuilder {
 
-public class ContentPageBuilder extends GridPageBuilder<ContentPageBuilder.OnCategorySelectCallback> {
-
-	private final static int MARGIN = 30;
 
 	private CentralManager manager;
 
@@ -28,8 +27,17 @@ public class ContentPageBuilder extends GridPageBuilder<ContentPageBuilder.OnCat
 		this.manager = manager;
 	}
 
-	@Override
-	public void build(GridLayout grid, final OnCategorySelectCallback callback) {
+	public View createView(LayoutInflater inflater, ViewGroup container, OnCategorySelectCallback callback) {
+
+		final View view = inflater.inflate(R.layout.sticker_tab, container, false);
+		final GridLayout grid = (GridLayout)view.findViewById(R.id.content_grid);
+		build(grid, callback);
+
+		return view;
+	}
+
+	private void build(GridLayout grid, final OnCategorySelectCallback callback) {
+		final Context context = manager.getContext();
 		final ResourcesRepository resourcesRepository = manager.getResourcesRepository();
 
 
@@ -38,9 +46,9 @@ public class ContentPageBuilder extends GridPageBuilder<ContentPageBuilder.OnCat
 			String tab = tabs.get(i);
 			Uri iconUri = resourcesRepository.getTabIcon(tab);
 
-			ImageView icon = new SquareImageView(manager.getContext());
+			ImageView icon = new SquareImageView(context);
+			icon = StickerImage.process(icon);
 			icon.setImageURI(iconUri);
-			imageSettings(icon);
 
 			final int index = i;
 			icon.setOnClickListener(new View.OnClickListener() {
@@ -68,8 +76,8 @@ public class ContentPageBuilder extends GridPageBuilder<ContentPageBuilder.OnCat
 	private void addGifAd(GridLayout grid) {
 		final Context context = manager.getContext();
 		ImageView icon = new SquareGifImageView(context);
+		icon = StickerImage.process(icon);
 		icon.setImageResource(R.drawable.gif);
-		imageSettings(icon);
 
 		icon.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -84,10 +92,4 @@ public class ContentPageBuilder extends GridPageBuilder<ContentPageBuilder.OnCat
 		grid.addView(icon);
 	}
 
-	private void imageSettings(ImageView icon) {
-		icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
-		icon.setPadding(MARGIN, MARGIN, MARGIN, MARGIN);
-		icon.setLayoutParams(getGridLayoutParams(NUM_COL));
-
-	}
 }

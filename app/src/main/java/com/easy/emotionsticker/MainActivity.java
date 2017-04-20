@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
@@ -16,9 +15,6 @@ import com.easy.emotionsticker.builder.ContentPageBuilder;
 import com.easy.emotionsticker.builder.HistoryPageBuilder;
 import com.easy.emotionsticker.callback.StickerCallback;
 import com.easy.emotionsticker.callback.StickerCallbackImpl;
-import com.easy.emotionsticker.fragment.ContentPageFragment;
-import com.easy.emotionsticker.fragment.HistoryPageFragment;
-import com.easy.emotionsticker.fragment.StickerFragmentListBuilder;
 import com.easy.emotionsticker.helper.AdHelper;
 import com.easy.emotionsticker.helper.ResourcesRepository;
 import com.easy.emotionsticker.helper.ScreenHelper;
@@ -28,12 +24,8 @@ import com.easy.emotionsticker.pick.AppRepository;
 import com.facebook.FacebookSdk;
 import com.google.android.gms.ads.AdView;
 
-import java.util.List;
-
 
 /*TODO:
-- increase stickers image quality
-- slice image to reduce overall app size
 - marketing
 	- video turtail
 	- like to unlock
@@ -82,9 +74,11 @@ public class MainActivity extends FragmentActivity implements CentralManager {
 	    //init sticker callback
 	    this.stickerCallback = new StickerCallbackImpl(this);
 
+
 	    //init UI
 	    initViewPager(settings);
 	    initMenuButtons();
+
 
 	    //first time alert
 	    if (settings.getBoolean("com.easy.emotionsticker.v3", true) ) {
@@ -136,13 +130,23 @@ public class MainActivity extends FragmentActivity implements CentralManager {
     private void initViewPager(SharedPreferences settings) {
 	    this.mViewPager = (ViewPager)super.findViewById(R.id.viewpager);
 
-	    Fragment contentPage = createContentPage(mViewPager);
-	    Fragment historyPage = createHistoryPage(mViewPager);
 
-	    StickerFragmentListBuilder listBuilder = new StickerFragmentListBuilder(this, stickerCallback);
-	    List<? extends Fragment> fragmentList = listBuilder.build(contentPage, historyPage);
 
-	    mViewPager.setAdapter(new StickerPagerAdapter(resourcesRepository, getSupportFragmentManager(), fragmentList));
+	    //init the fragment adapter
+		StickerPagerAdapter adapter = new StickerPagerAdapter(this);
+
+	    adapter.setStickerCallback(this.stickerCallback);
+
+	    adapter.setOnCategorySelectCallback(
+			new ContentPageBuilder.OnCategorySelectCallback() {
+				@Override
+				public void onCategorySelect(int i) {
+					ad.show();
+					mViewPager.setCurrentItem(i+2);
+				}
+	    });
+
+	    mViewPager.setAdapter(adapter);
 
         // Bind the tabs to the ViewPager
         this.mPagerSlidingTab = (PagerSlidingTabStrip) findViewById(R.id.tabs);
@@ -175,42 +179,6 @@ public class MainActivity extends FragmentActivity implements CentralManager {
 
 
 	//-----------------------------------------------------------------------------
-	//init content and history page
-
-	private ContentPageFragment createContentPage(final ViewPager viewPager) {
-		assert(viewPager != null);
-		ContentPageBuilder builder = new ContentPageBuilder(this);
-
-		ContentPageFragment fragment = new ContentPageFragment();
-		fragment.setContentPageBuilder(builder);
-		fragment.setCallback(new ContentPageBuilder.OnCategorySelectCallback() {
-			@Override
-			public void onCategorySelect(int i) {
-				ad.show();
-				viewPager.setCurrentItem(i+2);
-			}
-		});
-
-		return fragment;
-	}
-
-
-	private HistoryPageFragment createHistoryPage(final ViewPager viewPager) {
-		assert(viewPager != null);
-		final HistoryPageBuilder builder = new HistoryPageBuilder(this);
-
-		//setup the history page
-		HistoryPageFragment fragment = new HistoryPageFragment();
-		fragment.setHistoryPageBuilder(builder);
-		fragment.setCallback(stickerCallback);
-		fragment.setAdHelper(ad);
-
-		//set up the history clear button
-		builder.buildClearButton(findViewById(R.id.btn_clear_history));
-
-		return fragment;
-	}
-
 
 	private void initMenuButtons() {
 		ScreenHelper screenHelper = ScreenHelper.getInstance();
@@ -238,6 +206,10 @@ public class MainActivity extends FragmentActivity implements CentralManager {
 				showSetting();
 			}
 		});
+
+		//build history buttons
+		View btnClear = findViewById(R.id.btn_clear_history);
+		new HistoryPageBuilder(this).buildClearButton(btnClear);
 	}
 
 	private void showSetting() {
