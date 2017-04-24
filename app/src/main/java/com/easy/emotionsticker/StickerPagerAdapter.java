@@ -2,6 +2,7 @@ package com.easy.emotionsticker;
 
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,9 @@ import com.easy.emotionsticker.builder.StickerPageBuilder;
 import com.easy.emotionsticker.callback.StickerCallback;
 import com.easy.emotionsticker.helper.ResourcesRepository;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * Created by david on 20/04/2017.
@@ -46,7 +47,8 @@ public class StickerPagerAdapter extends PagerAdapter implements PagerSlidingTab
 		this.contentPageBuilder = new ContentPageBuilder(manager);
 		this.stickerPageBuilder = new StickerPageBuilder(manager);
 
-		this.stickerViews = new HashMap<>();
+		this.stickerViews = new WeakHashMap<>();
+
 	}
 
 	@Override
@@ -76,42 +78,43 @@ public class StickerPagerAdapter extends PagerAdapter implements PagerSlidingTab
 	private View getContentView(ViewGroup container) {
 		if (contentView != null) return contentView;
 		this.contentView = contentPageBuilder.createView(inflater, container, onCategorySelectCallback);
-		contentView.setTag("content");
 		return contentView;
 	}
 
 	private View getHistoryView(ViewGroup container) {
 		if (historyView != null) return historyView;
 		this.historyView = historyPageBuilder.createView(inflater, container, stickerCallback);
-		historyView.setTag("history");
 		return historyView;
 	}
 
 	private View getStickerView(ViewGroup container, String tabName) {
 		View view = stickerViews.get(tabName);
-		if (view != null) return view;
+		if (view == null) {
+			view = stickerPageBuilder.createView(inflater, container);
+			stickerPageBuilder.updateView(view, tabName, stickerCallback);
+			stickerViews.put(tabName, view);
+		}
 
-		view = stickerPageBuilder.createView(inflater, container,  tabName, stickerCallback);
-		view.setTag(tabName);
-		stickerViews.put(tabName, view);
 		return view;
 	}
 
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
+		Log.d("TAG", "destroyItem: ");
 		if (false == object instanceof View) return;
 		View view = (View) object;
+
 		if (view.getParent() == container) {
 			container.removeView(view);
 		}
+
 	}
 
 
 	@Override
 	public boolean isViewFromObject(View view, Object object) {
-		if (false == object instanceof View) return false;
-		return view.getTag() == ((View)object).getTag();
+		return view == object;
 	}
 
 

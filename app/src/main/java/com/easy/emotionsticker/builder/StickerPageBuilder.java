@@ -1,6 +1,7 @@
 package com.easy.emotionsticker.builder;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,6 @@ import com.easy.emotionsticker.helper.ResourcesRepository;
 import com.easy.emotionsticker.image.SquareImageView;
 import com.easy.emotionsticker.image.StickerImage;
 
-import static com.easy.emotionsticker.helper.ScreenHelper.getGridLayoutParams;
-
 /**
  * Created by david.wong on 18/06/2016.
  */
@@ -28,11 +27,27 @@ public class StickerPageBuilder {
 		this.manager = manager;
 	}
 
-	public View createView(LayoutInflater inflater, ViewGroup container, final String tabName, final StickerCallback callback) {
+	public View createView(LayoutInflater inflater, ViewGroup container) {
+		return inflater.inflate(R.layout.sticker_tab, container, false);
+	}
+
+	public void clearView(View view) {
+		GridLayout grid = (GridLayout) view.findViewById(R.id.content_grid);
+		int oldSize = grid.getChildCount();
+		Log.d("TAG", "oldSize: " + String.valueOf(oldSize));
+		for (int i=0; i<oldSize; ++i) {
+			View v = grid.getChildAt(i);
+			if (v instanceof ImageView) {
+				((ImageView) v).setImageResource(0);
+			}
+		}
+		grid.removeAllViews();
+	}
+
+	public View updateView(View view, final String tabName, final StickerCallback callback) {
 		final ResourcesRepository resourcesRepository = manager.getResourcesRepository();
 		final Context context = manager.getContext();
 
-		final View view = inflater.inflate(R.layout.sticker_tab, container, false);
 		GridLayout grid = (GridLayout) view.findViewById(R.id.content_grid);
 
 		final int size = resourcesRepository.getTabSize(tabName);
@@ -53,9 +68,7 @@ public class StickerPageBuilder {
 		}
 
 		return view;
-
 	}
-
 
 
 

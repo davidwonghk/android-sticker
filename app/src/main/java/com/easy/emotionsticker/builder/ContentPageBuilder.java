@@ -61,7 +61,7 @@ public class ContentPageBuilder {
 			grid.addView(icon);
 		}
 
-		addGifAd(grid);
+		//addGifAd(grid);
 	}
 
 

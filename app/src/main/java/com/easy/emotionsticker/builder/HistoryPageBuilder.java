@@ -17,6 +17,7 @@ import com.easy.emotionsticker.callback.StickerCallback;
 import com.easy.emotionsticker.helper.AdHelper;
 import com.easy.emotionsticker.helper.ResourcesRepository;
 import com.easy.emotionsticker.helper.StickerHistory;
+import com.easy.emotionsticker.image.SquareImageView;
 import com.easy.emotionsticker.image.StickerImage;
 import com.easy.emotionsticker.image.ZoomSquareImageView;
 
@@ -66,7 +67,7 @@ public class HistoryPageBuilder {
 			Log.d(TAG, h);
 
 			Uri stickerUri = resourcesRepository.getSticker(h);
-			ImageView sticker = new ZoomSquareImageView(context);
+			ImageView sticker = new SquareImageView(context);
 			sticker = StickerImage.process(sticker);
 			sticker.setImageURI(stickerUri);
 			sticker.setOnClickListener(new View.OnClickListener() {

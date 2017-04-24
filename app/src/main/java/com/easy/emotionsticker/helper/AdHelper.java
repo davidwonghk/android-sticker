@@ -79,7 +79,7 @@ public class AdHelper {
 	}
 
 	public void show() {
-		if (new Random().nextInt(2) == 0) {
+		if (new Random().nextInt(3) > 0) {
 			return;
 		}
 		try {
