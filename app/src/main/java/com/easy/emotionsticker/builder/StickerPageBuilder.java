@@ -38,7 +38,9 @@ public class StickerPageBuilder {
 		for (int i=0; i<oldSize; ++i) {
 			View v = grid.getChildAt(i);
 			if (v instanceof ImageView) {
-				((ImageView) v).setImageResource(0);
+				ImageView image = (ImageView)v;
+				image.setImageResource(0);
+				image.setImageDrawable(null);
 			}
 		}
 		grid.removeAllViews();
